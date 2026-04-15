@@ -35,6 +35,10 @@
             flex-direction: column;
             box-sizing: border-box;
             flex-shrink: 0;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
         }
 
         .profile-area { text-align: center; margin-bottom: 25px; }
@@ -55,90 +59,107 @@
         .nav-link {
             display: flex; align-items: center; gap: 12px; padding: 12px; 
             color: white; text-decoration: none; border-radius: 8px;
-            margin-bottom: 5px; font-weight: 500; font-size: 14px;
+            margin-bottom: 5px; font-weight: 500; font-size: 13px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
-        .nav-link:hover { background: rgba(255, 255, 255, 0.15); }
 
-        /* --- TERMS SECTION (FULL CONTENT) --- */
+        /* --- TERMS SECTION (FULL 10 POINTS) --- */
         .terms-container { margin-top: 20px; width: 100%; }
         .terms-title-btn {
             background: #000; border: none; color: white; width: 100%;
             display: flex; align-items: center; justify-content: space-between;
             padding: 12px; font-weight: bold; cursor: pointer;
-            border-radius: 5px 5px 0 0; text-transform: uppercase; font-size: 11px;
+            border-radius: 5px 5px 0 0; text-transform: uppercase; font-size: 10px;
         }
         .terms-sheet {
-            max-height: 0; overflow: hidden;
+            max-height: 0; overflow-y: auto;
             background: #fdfdfd; color: #333;
             transition: max-height 0.6s ease-in-out;
             border-radius: 0 0 5px 5px;
         }
-        .terms-container.active .terms-sheet { max-height: 2000px; border: 1px solid #ddd; }
-        .terms-content { padding: 15px; font-size: 11px; line-height: 1.6; text-align: left; }
-        .terms-content h5 { margin: 15px 0 5px 0; color: #e72c30; font-size: 12px; border-bottom: 1px solid #eee; font-weight: bold; }
-        .terms-content ul { padding-left: 15px; margin: 5px 0; }
+        .terms-container.active .terms-sheet { max-height: 400px; border: 1px solid #ddd; }
+        .terms-content { padding: 15px; font-size: 11px; line-height: 1.5; }
+        .terms-content h5 { margin: 10px 0 5px; color: var(--gaana-red); border-bottom: 1px solid #eee; }
 
-        /* --- HELP & SUPPORT --- */
         .help-support {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 2px solid rgba(255,255,255,0.3);
+            margin-top: 20px; padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.3);
             padding-bottom: 120px;
-        }
-        .help-title {
-            font-size: 12px; font-weight: bold; text-transform: uppercase;
-            margin-bottom: 15px; display: block; letter-spacing: 1px;
         }
         .support-btn {
             display: flex; align-items: center; gap: 10px;
-            background: white; border-radius: 6px; padding: 10px;
-            margin-bottom: 10px; text-decoration: none; font-size: 13px;
-            font-weight: 600; transition: 0.3s;
+            background: white; border-radius: 6px; padding: 8px 12px;
+            margin-bottom: 10px; text-decoration: none; font-size: 12px;
+            font-weight: 600;
         }
-        .support-btn.whatsapp { color: var(--whatsapp-green); border-left: 5px solid var(--whatsapp-green); }
-        .support-btn.gmail { color: var(--gmail-color); border-left: 5px solid var(--gmail-color); }
-        .support-btn:hover { transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .support-btn.whatsapp { color: var(--whatsapp-green); }
+        .support-btn.gmail { color: var(--gmail-color); }
 
-        /* --- MAIN WRAPPER --- */
+        /* --- MAIN WRAPPER & HEADER --- */
         .main-wrapper {
             flex-grow: 1;
-            margin: 40px 40px 120px 20px;
+            margin: 40px 40px 140px 20px;
             background: var(--notebook-bg);
-            border-radius: 8px; min-height: 100vh;
-            position: relative; padding: 40px 0; 
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            border-radius: 12px; min-height: 100vh;
+            position: relative;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
         }
         .main-wrapper::before {
             content: ''; position: absolute; left: 60px; top: 0; bottom: 0;
             width: 2px; background: var(--margin-line); z-index: 1;
         }
-        .header-card { padding: 0 80px; margin-bottom: 40px; }
-        .track-list { width: 100%; border-collapse: collapse; }
-        .track-item td { border-bottom: 1px solid var(--line-color); padding: 18px 0; }
-        .track-no { width: 60px; text-align: center; font-weight: bold; color: #888; }
-        .track-main { display: flex; align-items: center; gap: 15px; padding-left: 10px; }
-        .track-img { width: 50px; height: 50px; border-radius: 5px; object-fit: cover; }
-        .track-name { font-weight: 600; color: #222; }
+
+        .header-section {
+            background: #fcfcfc; padding: 40px 80px;
+            border-bottom: 3px solid #000; width: 100%; box-sizing: border-box;
+        }
+        .header-section h1 { font-size: 42px; margin: 0; text-transform: uppercase; letter-spacing: 2px; }
+        .header-section p { font-size: 16px; color: var(--gaana-red); font-weight: 600; margin-top: 5px; }
+
+        /* --- TRACK LIST --- */
+        .track-list { width: 100%; border-collapse: collapse; position: relative; z-index: 2; }
+        .track-item td { border-bottom: 1px solid var(--line-color); padding: 20px 0; }
+        .track-no { width: 80px; text-align: center; font-weight: bold; color: #bbb; font-size: 18px; }
+        .track-main { display: flex; align-items: center; gap: 25px; padding-left: 20px; }
+        .play-icon { font-size: 28px; color: var(--gaana-red); cursor: pointer; }
+        .track-img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; }
+        .track-name { font-weight: 700; color: #1a1a1a; font-size: 16px; }
 
         .buy-badge { 
-            background: #000; color: white; padding: 10px 20px; 
-            border-radius: 4px; font-weight: bold; cursor: pointer; border: none; font-size: 12px; margin-right: 30px;
+            background: #000; color: white; padding: 12px 25px; 
+            border-radius: 6px; font-weight: bold; cursor: pointer; border: none; margin-right: 40px;
         }
 
+        /* --- PLAYER BAR --- */
         .player-bar {
             position: fixed; bottom: 0; left: 0; width: 100%;
-            background: #18191a; padding: 15px 40px;
+            background: #121212; padding: 15px 40px;
             display: flex; align-items: center; justify-content: space-between;
             z-index: 9999; color: white; box-sizing: border-box;
+            border-top: 3px solid var(--gaana-red);
         }
-        audio { filter: invert(100%); }
 
         @media (max-width: 850px) {
             body { flex-direction: column; }
-            .sidebar { width: 100%; }
-            .main-wrapper { margin: 15px; }
+            .sidebar { width: 100%; height: auto; position: relative; }
+            .main-wrapper { margin: 15px; margin-bottom: 160px; }
+            .header-section { padding: 30px 40px; }
+            .header-section h1 { font-size: 28px; }
         }
+
+        /* Purane buy-badge ke niche ye naya style paste karein */
+.buy-badge.locked {
+    background: #555 !important;
+    cursor: not-allowed !important;
+    opacity: 0.6;
+    pointer-events: none;
+    position: relative;
+}
+
+.buy-badge.locked::after {
+    content: ' 🔒';
+    font-size: 10px;
+}
     </style>
 </head>
 <body>
@@ -158,126 +179,110 @@
 
         <div class="terms-container" id="termsBox">
             <button class="terms-title-btn" onclick="toggleTerms()">
-                🎧 MUSIC LICENSE AGREEMENT <i class="fas fa-chevron-down"></i>
+                📜 License Agreement <i class="fas fa-chevron-down"></i>
             </button>
             <div class="terms-sheet">
                 <div class="terms-content">
-                    <p style="text-align:center; font-weight:bold; border-bottom:1px solid #ddd; padding-bottom:5px;">AI GENERATED – USING SUNO AI</p>
-                    
-                    <h5>1. Ownership:</h5>
-                    <p>This music/audio is generated using AI tools (Suno AI). The seller (creator) provides a license to use the music, not full ownership unless explicitly agreed in writing.</p>
-                    
-                    <h5>2. License Type:</h5>
-                    <p>This license is NON-EXCLUSIVE by default. The same music may be sold or used for multiple clients unless an exclusive license is purchased separately.</p>
-                    
-                    <h5>3. Usage Rights:</h5>
-                    <p>The client is allowed to:</p>
-                    <ul>
-                        <li>Use the music in YouTube videos, social media, advertisements, and other content</li>
-                        <li>Monetize videos/content that include this music</li>
-                    </ul>
-                    
-                    <h5>4. Restrictions:</h5>
-                    <p>The client is allowed to use the music only as part of their content (e.g., videos, ads).</p>
-                    <p>The client is strictly NOT allowed to:</p>
-                    <ul>
-                        <li>Resell, redistribute, or share the music as a standalone file</li>
-                        <li>Sell or transfer the music to any third party</li>
-                        <li>Claim ownership or copyright of the music</li>
-                        <li>Upload the music to streaming platforms (Spotify, Apple Music, etc.) as their own</li>
-                    </ul>
-                    <p>The client may monetize their content using this music, but cannot sell or monetize the music separately in any form.</p>
-                    
-                    <h5>5. Copyright Notice:</h5>
-                    <p>This music is AI-generated. While commercially usable, 100% copyright uniqueness is not guaranteed. The seller is not responsible for any copyright claims that may arise.</p>
-                    
-                    <h5>6. Credit (Optional but Recommended):</h5>
-                    <p>Music by [Praveen AI Music] Generated using AI</p>
-                    
-                    <h5>7. Refund Policy:</h5>
-                    <p>Due to the digital nature of the product, no refunds will be provided once delivered.</p>
-                    
-                    <h5>8. Custom Orders:</h5>
-                    <p>Custom music requests may include different pricing and licensing terms.</p>
-                    
-                    <h5>9. Exclusive License (Optional Paid Upgrade):</h5>
-                    <p>If purchased separately:</p>
-                    <ul>
-                        <li>The music will be sold to only one client</li>
-                        <li>The seller will not resell or reuse the track</li>
-                        <li>Client gets extended commercial usage rights (Note: Copyright guarantee still not absolute due to AI generation)</li>
-                    </ul>
-                    
-                    <h5>10. Termination Clause:</h5>
-                    <p>Any violation of these terms may result in license termination without prior notice.</p>
+                    <h5>1. Ownership</h5><p>AI generated via Suno AI. License provided for usage rights.</p>
+                    <h5>2. License Type</h5><p>Non-exclusive by default.</p>
+                    <h5>3. Usage Rights</h5><p>Allowed for YouTube, social media, and ads.</p>
+                    <h5>4. Restrictions</h5><p>No standalone reselling or streaming upload as own.</p>
+                    <h5>5. Copyright</h5><p>No 100% uniqueness guarantee due to AI nature.</p>
+                    <h5>6. Credit</h5><p>Optional: Praveen AI Music.</p>
+                    <h5>7. Refund</h5><p>Digital products are non-refundable.</p>
+                    <h5>8. Custom Orders</h5><p>Separate pricing for custom beats.</p>
+                    <h5>9. Exclusive License</h5><p>Available as a paid upgrade.</p>
+                    <h5>10. Termination</h5><p>Violation results in license cancellation.</p>
                 </div>
             </div>
         </div>
 
         <div class="help-support">
-            <span class="help-title">Help & Support</span>
-            <a href="https://wa.me/919384522971" class="support-btn whatsapp" target="_blank">
-                <i class="fab fa-whatsapp"></i> WhatsApp Support
-            </a>
-            <a href="mailto:praveenmarandi62@gmail.com" class="support-btn gmail">
-                <i class="fas fa-envelope"></i> Gmail Contact
-            </a>
+            <a href="https://wa.me/919384522971" class="support-btn whatsapp" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+            <a href="mailto:praveenmarandi62@gmail.com" class="support-btn gmail"><i class="fas fa-envelope"></i> Gmail Support</a>
         </div>
     </div>
 
     <div class="main-wrapper">
-        <div class="header-card">
-            <h1 style="border-bottom: 2px solid #000; display: inline-block;">Music Index</h1>
-            <p style="color: #666;">Official AI Produced Audio Tracks</p>
+        <div class="header-section">
+            <h1>Music Index</h1>
+            <p>Original AI Song and Beat</p>
         </div>
-
-        <table class="track-list" id="trackList">
-            </table>
+        <table class="track-list" id="trackList"></table>
     </div>
 
     <div class="player-bar">
-        <div style="display:flex; align-items:center; gap:10px;">
-            <img src="raat-ki-chaadar.jpg" style="width:35px; border-radius:4px;">
-            <div style="font-size:11px;">Preview Player</div>
+        <div style="display:flex; align-items:center; gap:15px;">
+            <img src="soft1.png" id="current-track-img" style="width:50px; height:50px; border-radius:6px; object-fit:cover;">
+            <div>
+                <div id="current-track-name" style="font-size:14px; font-weight:bold;">Select a track</div>
+                <div style="font-size:11px; color:#aaa;">Now Playing</div>
+            </div>
         </div>
-        <audio controls><source src="sample.mp3"></audio>
-        <button class="buy-badge" style="background:var(--gaana-red); margin:0;" onclick="processPayment(this)">DOWNLOAD</button>
+        <audio id="main-audio" controls onplay="updateIcons(true)" onpause="updateIcons(false)"><source src=""></audio>
+        <button class="buy-badge locked" style="background:var(--gaana-red); margin:0;">DOWNLOAD</button>
     </div>
 
     <script>
-        function toggleTerms() {
-            document.getElementById('termsBox').classList.toggle('active');
-        }
+    function toggleTerms() { document.getElementById('termsBox').classList.toggle('active'); }
 
-        const table = document.getElementById('trackList');
-        for (let i = 1; i <= 20; i++) {
-            const num = i < 10 ? '0' + i : i;
-            table.innerHTML += `
-            <tr class="track-item">
-                <td class="track-no">${num}</td>
-                <td class="track-main">
-                    <img src="raat-ki-chaadar.jpg" class="track-img">
-                    <div>
-                        <div class="track-name">Praveen AI Track ${num}</div>
-                        <div style="font-size:12px; color:#888;">Full HD Commercial Audio</div>
-                    </div>
-                </td>
-                <td style="text-align: right;">
-                    <button class="buy-badge" onclick="processPayment(this)">BUY ₹29</button>
-                </td>
-            </tr>`;
-        }
+    // --- AUTOMATION: Yahan naye gaane add karte jayein ---
+    const myTracks = [
+        { name: "Victory 1", img: "steel1.png", audio: "steel1.mp3" },
+        { name: "Victory", img: "steel2.png", audio: "steel2.mp3" },
+        { name: "Soft 1", img: "soft1.png", audio: "soft1.mp3" },
+        { name: "Soft 2", img: "soft2.png", audio: "soft2.mp3" },
+        { name: "Wind Piano 1", img: "water1.png", audio: "water1.mp3" },
+        { name: "Wind Piano 2", img: "water2.png", audio: "water2.mp3" },
+        { name: "Rain Glass 1", img: "r1.png", audio: "r1.mp3" },
+        { name: "Rain Glass 2", img: "r2.png", audio: "r2.mp3" }
+        // Naya gaana yahan comma (,) laga kar add karein
+    ];
 
-        function processPayment(button) {
-            if(confirm("Confirm purchase?")) {
-                button.innerHTML = "Processing...";
-                setTimeout(() => {
-                    alert("Success! License Granted.");
-                    button.innerHTML = "SAVE FILE";
-                    button.style.background = "#28a745";
-                }, 1200);
-            }
+    const table = document.getElementById('trackList');
+    let currentPlayingId = null;
+
+    myTracks.forEach((track, index) => {
+        const num = (index + 1) < 10 ? '0' + (index + 1) : (index + 1);
+        table.innerHTML += `
+        <tr class="track-item">
+            <td class="track-no">${num}</td>
+            <td class="track-main">
+                <i class="fas fa-play-circle play-icon" id="icon-${index}" onclick="playTrack(${index})"></i>
+                <img src="${track.img}" class="track-img">
+                <div>
+                    <div class="track-name">${track.name}</div>
+                    <div style="font-size:12px; color:#888;">Original AI Audio</div>
+                </div>
+            </td>
+            <td style="text-align: right;">
+                
+<button class="buy-badge locked">BUY ₹29</button>
+            </td>
+        </tr>`;
+    });
+
+    function playTrack(index) {
+        const track = myTracks[index];
+        const audioPlayer = document.getElementById('main-audio');
+        if (currentPlayingId === index && !audioPlayer.paused) {
+            audioPlayer.pause();
+        } else {
+            if (currentPlayingId !== null) document.getElementById(`icon-${currentPlayingId}`).className = "fas fa-play-circle play-icon";
+            audioPlayer.src = track.audio;
+            document.getElementById('current-track-img').src = track.img;
+            document.getElementById('current-track-name').innerText = track.name;
+            audioPlayer.play();
+            currentPlayingId = index;
+            document.getElementById(`icon-${index}`).className = "fas fa-pause-circle play-icon";
         }
+    }
+
+    function updateIcons(isPlaying) {
+        if (currentPlayingId !== null) {
+            document.getElementById(`icon-${currentPlayingId}`).className = isPlaying ? "fas fa-pause-circle play-icon" : "fas fa-play-circle play-icon";
+        }
+    }
     </script>
 </body>
 </html>
