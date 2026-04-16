@@ -63,14 +63,59 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        /* --- TERMS SECTION --- */
-        .terms-container { margin-top: 20px; width: 100%; }
         .terms-title-btn {
-            background: #000; border: none; color: white; width: 100%;
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 12px; font-weight: bold; cursor: pointer;
-            border-radius: 5px 5px 0 0; text-transform: uppercase; font-size: 10px;
-        }
+    background: #000000 !important;
+    color: #ffffff !important;
+    width: 100%;
+    min-height: 45px; /* Height thodi badha di taaki text dikhe */
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Text ko center mein rakhega */
+    gap: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px 5px 0 0;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+
+.terms-title-btn {
+    background: #000000 !important;
+    color: #ffffff !important;
+    width: 100%;
+    min-height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px 5px 0 0;
+    cursor: pointer;
+}
+
+.terms-btn-text {
+    color: #ffffff !important;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+/* Ye aapke overlap buttons ko theek karega */
+.track-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    gap: 10px;
+}
+
+.track-main {
+    flex: 1; /* Ye gaane ke naam ko jagah dega */
+    min-width: 0;
+}
+
         .terms-sheet {
             max-height: 0; overflow-y: auto;
             background: #fdfdfd; color: #333;
@@ -192,17 +237,52 @@
             <a href="https://facebook.com/share/1KAcze5JrC/" class="nav-link" target="_blank"><i class="fab fa-facebook"></i> Facebook</a>
         </nav>
 
-        <div class="terms-container" id="termsBox">
-            <button class="terms-title-btn" onclick="toggleTerms()">
-                📜 License Agreement <i class="fas fa-chevron-down"></i>
-            </button>
-            <div class="terms-sheet">
-                <div class="terms-content">
-                    <h5>1. Ownership</h5><p>AI generated via Suno AI.</p>
-                    <h5>2. Usage Rights</h5><p>Allowed for YouTube and Social Media.</p>
-                </div>
-            </div>
-        </div>
+        <div class="terms-content">
+</button>
+    <span class="terms-btn-text">🎧 MUSIC LICENSE AGREEMENT</span>
+    <i class="fas fa-chevron-down"></i>
+</button>
+    
+    <h5>1. Ownership</h5>
+    <p>This music/audio is generated using AI tools (Suno AI). The seller (creator) provides a license to use the music, not full ownership unless explicitly agreed in writing.</p>
+
+    <h5>2. License Type</h5>
+    <p>This license is NON-EXCLUSIVE by default. The same music may be sold or used for multiple clients unless an exclusive license is purchased separately.</p>
+
+    <h5>3. Usage Rights</h5>
+    <p>The client is allowed to:</p>
+    <ul>
+        <li>Use the music in YouTube videos, social media, ads, and other content.</li>
+        <li>Monetize videos/content that include this music.</li>
+    </ul>
+
+    <h5>4. Restrictions</h5>
+    <p>The client is strictly NOT allowed to:</p>
+    <ul>
+        <li>Resell, redistribute, or share as a standalone file.</li>
+        <li>Sell or transfer to any third party.</li>
+        <li>Claim ownership or copyright of the music.</li>
+        <li>Upload to streaming platforms (Spotify, Apple Music, etc.) as their own.</li>
+    </ul>
+
+    <h5>5. Copyright Notice</h5>
+    <p>This music is AI-generated. 100% copyright uniqueness is not guaranteed. The seller is not responsible for any copyright claims.</p>
+
+    <h5>6. Credit (Recommended)</h5>
+    <p>Music by Praveen AI Music | Generated using AI</p>
+
+    <h5>7. Refund Policy</h5>
+    <p>Due to the digital nature of the product, no refunds will be provided once delivered.</p>
+
+    <h5>8. Custom Orders</h5>
+    <p>Custom music requests may include different pricing and licensing terms.</p>
+
+    <h5>9. Exclusive License</h5>
+    <p>If purchased separately, the music will be sold to only one client and will not be resold.</p>
+
+    <h5>10. Termination Clause</h5>
+    <p>Any violation of these terms may result in license termination without prior notice.</p>
+</div>
 
         <div class="help-support">
             <a href="https://wa.me/919384522971" class="support-btn whatsapp" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
@@ -219,16 +299,22 @@
     </div>
 
     <div class="player-bar">
-        <div style="display:flex; align-items:center; gap:10px;">
-            <img src="soft1.png" id="current-track-img" style="width:40px; height:40px; border-radius:4px; object-fit:cover;">
-            <div class="track-info">
-                <div id="current-track-name" style="font-size:12px; font-weight:bold; white-space:nowrap;">Select track</div>
-                <div style="font-size:10px; color:#aaa;">Playing</div>
-            </div>
+    <div style="display:flex; align-items:center; gap:10px; flex: 1;">
+        <img src="soft1.png" id="current-track-img" style="width:40px; height:40px; border-radius:4px; object-fit:cover;">
+        <div class="track-info">
+            <div id="current-track-name" style="font-size:12px; font-weight:bold; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100px;">Select track</div>
+            <div style="font-size:10px; color:#aaa;">Playing</div>
         </div>
-        <audio id="main-audio" controls onplay="updateIcons(true)" onpause="updateIcons(false)"><source src=""></audio>
-        <button class="buy-badge locked"><span>DOWNLOAD</span><span>🔒</span></button>
     </div>
+    
+    <audio id="main-audio" controls controlsList="nodownload" onplay="updateIcons(true)" onpause="updateIcons(false)" style="width: 150px;">
+    <source src="">
+</audio>
+
+    <div style="flex: 1; text-align: right; display: flex; justify-content: flex-end;">
+         <button class="buy-badge locked" style="margin:0; padding: 5px 10px; font-size: 9px;">DOWNLOAD 🔒</button>
+    </div>
+</div>
 
     <script>
     function toggleTerms() { document.getElementById('termsBox').classList.toggle('active'); }
