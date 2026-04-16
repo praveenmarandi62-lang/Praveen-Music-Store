@@ -140,25 +140,79 @@
         }
 
         @media (max-width: 850px) {
-            body { flex-direction: column; }
-            .sidebar { width: 100%; height: auto; position: relative; }
-            .main-wrapper { margin: 15px; margin-bottom: 160px; }
-            .header-section { padding: 30px 40px; }
-            .header-section h1 { font-size: 28px; }
-        }
+    body { 
+        flex-direction: column; 
+    }
 
-        /* Purane buy-badge ke niche ye naya style paste karein */
-.buy-badge.locked {
-    background: #555 !important;
-    cursor: not-allowed !important;
-    opacity: 0.6;
-    pointer-events: none;
-    position: relative;
-}
+    .sidebar { 
+        width: 100%; 
+        height: auto; 
+        position: relative; 
+    }
 
-.buy-badge.locked::after {
-    content: ' 🔒';
-    font-size: 10px;
+    .main-wrapper { 
+        margin: 10px; 
+        margin-bottom: 170px; 
+    }
+
+    .header-section { 
+        padding: 25px 20px; 
+    }
+
+    .header-section h1 { 
+        font-size: 26px; 
+    }
+
+    /* 🔥 MAIN FIX START */
+    .track-item {
+        display: block;
+        padding: 15px 10px;
+    }
+
+    .track-item td {
+        display: block;
+        width: 100%;
+        padding: 8px 0;
+        border: none;
+    }
+
+    .track-no {
+        text-align: left;
+        font-size: 14px;
+        padding-left: 10px;
+    }
+
+    .track-main {
+        gap: 12px;
+        padding-left: 10px;
+    }
+
+    .track-img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .track-name {
+        font-size: 14px;
+    }
+
+    .buy-badge {
+        width: 100%;
+        margin: 10px 0 0 0;
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    /* Player fix */
+    .player-bar {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .player-bar audio {
+        width: 100%;
+    }
 }
     </style>
 </head>
