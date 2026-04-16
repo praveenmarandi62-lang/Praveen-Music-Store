@@ -225,17 +225,37 @@ audio {
 }
 
 /* --- MOBILE DESIGN (Responsive) --- */
-@media (max-width: 850px) {
-    body { flex-direction: column; }
-    .sidebar { width: 100%; height: auto; position: relative; }
-    .main-wrapper { 
-        margin: 10px 10px 120px 10px; /* Niche 120px gap diya taaki scrolling sahi ho */
-        min-height: calc(100vh - 50px);
-    }
-    .header-section { padding: 20px 40px; }
-    .header-section h1 { font-size: 22px; }
-    .track-list { padding-left: 40px; }
-    audio { width: 130px; } /* Mobile par player thoda chota */
+@media (max-width: 850px) {}
+    /* Player Bar ko mobile ke liye optimize kiya */
+    .player-bar {
+    position: fixed; bottom: 0; left: 0; width: 100%;
+    background: #121212; height: 75px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 10px; z-index: 9999; border-top: 2px solid var(--gaana-red);
+    box-sizing: border-box; gap: 5px;
+}
+
+/* Left Side Styling */
+.p-left { display: flex; align-items: center; gap: 8px; flex: 1.2; min-width: 0; }
+.p-left img { width: 40px; height: 40px; border-radius: 4px; object-fit: cover; }
+.p-info { display: flex; flex-direction: column; overflow: hidden; }
+#current-track-name { font-size: 11px; font-weight: bold; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.p-info small { font-size: 9px; color: #aaa; }
+
+/* Middle Styling (Seekbar) */
+.p-mid { flex: 2; display: flex; justify-content: center; }
+audio { width: 100% !important; height: 32px !important; }
+
+/* Right Side Styling */
+.p-right { flex: 1; display: flex; justify-content: flex-end; }
+.p-right .buy-badge { padding: 6px 8px; font-size: 10px; min-width: 75px; white-space: nowrap; }
+
+/* Mobile View Adjustments */
+@media (max-width: 600px) {
+    .p-left { flex: 0.8; } /* Mobile par photo/naam thoda chota */
+    #current-track-name { width: 60px; } /* Naam ko katne se rokne ke liye */
+    audio { width: 130px !important; } /* Dande ka size mobile ke hisab se */
+    .p-right .buy-badge { min-width: 65px; font-size: 9px; }
 }
         
     </style>
@@ -317,20 +337,22 @@ audio {
     </div>
 
     <div class="player-bar">
-    <div style="display:flex; align-items:center; gap:8px; flex: 1; min-width: 0;">
-        <img src="soft1.png" id="current-track-img" style="width:35px; height:35px; border-radius:4px; object-fit:cover; flex-shrink: 0;">
-        <div class="track-info" style="overflow: hidden;">
-            <div id="current-track-name" style="font-size:11px; font-weight:bold; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Select track</div>
-            <div style="font-size:9px; color:#aaa;">Playing</div>
+    <div class="p-left">
+        <img src="soft1.png" id="current-track-img">
+        <div class="p-info">
+            <span id="current-track-name">Select track</span>
+            <small>Playing</small>
         </div>
     </div>
 
-    <audio id="main-audio" controls controlsList="nodownload" onplay="updateIcons(true)" onpause="updateIcons(false)" style="height: 32px; width: 140px;">
-        <source src="">
-    </audio>
+    <div class="p-mid">
+        <audio id="main-audio" controls controlsList="nodownload noplaybackrate" onplay="updateIcons(true)" onpause="updateIcons(false)" preload="metadata">
+            <source src="" type="audio/mpeg">
+        </audio>
+    </div>
 
-    <div style="flex: 1; display: flex; justify-content: flex-end;">
-        <button class="buy-badge locked" style="padding: 5px 8px; font-size: 9px; min-width: 70px;">DOWNLOAD 🔒</button>
+    <div class="p-right">
+        <button class="buy-badge locked">DOWNLOAD 🔒</button>
     </div>
 </div>
 
