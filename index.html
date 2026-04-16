@@ -63,7 +63,7 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        /* --- TERMS SECTION (FULL 10 POINTS) --- */
+        /* --- TERMS SECTION --- */
         .terms-container { margin-top: 20px; width: 100%; }
         .terms-title-btn {
             background: #000; border: none; color: white; width: 100%;
@@ -79,7 +79,6 @@
         }
         .terms-container.active .terms-sheet { max-height: 400px; border: 1px solid #ddd; }
         .terms-content { padding: 15px; font-size: 11px; line-height: 1.5; }
-        .terms-content h5 { margin: 10px 0 5px; color: var(--gaana-red); border-bottom: 1px solid #eee; }
 
         .help-support {
             margin-top: 20px; padding-top: 15px;
@@ -95,7 +94,7 @@
         .support-btn.whatsapp { color: var(--whatsapp-green); }
         .support-btn.gmail { color: var(--gmail-color); }
 
-        /* --- MAIN WRAPPER & HEADER --- */
+        /* --- MAIN WRAPPER --- */
         .main-wrapper {
             flex-grow: 1;
             margin: 40px 40px 140px 20px;
@@ -103,37 +102,64 @@
             border-radius: 12px; min-height: 100vh;
             position: relative;
             box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+            overflow: hidden;
         }
         .main-wrapper::before {
-            content: ''; position: absolute; left: 60px; top: 0; bottom: 0;
+            content: ''; position: absolute; left: 50px; top: 0; bottom: 0;
             width: 2px; background: var(--margin-line); z-index: 1;
         }
 
         .header-section {
-            background: #fcfcfc; padding: 40px 80px;
+            background: #fcfcfc; padding: 30px 60px;
             border-bottom: 3px solid #000; width: 100%; box-sizing: border-box;
         }
-        .header-section h1 { font-size: 42px; margin: 0; text-transform: uppercase; letter-spacing: 2px; }
-        .header-section p { font-size: 16px; color: var(--gaana-red); font-weight: 600; margin-top: 5px; }
+        .header-section h1 { font-size: 32px; margin: 0; text-transform: uppercase; }
+        .header-section p { font-size: 14px; color: var(--gaana-red); font-weight: 600; }
 
-        /* --- TRACK LIST --- */
-        .track-list { width: 100%; border-collapse: collapse; position: relative; z-index: 2; }
-        .track-item td { border-bottom: 1px solid var(--line-color); padding: 20px 0; }
-        .track-no { width: 80px; text-align: center; font-weight: bold; color: #bbb; font-size: 18px; }
-        .track-main { display: flex; align-items: center; gap: 25px; padding-left: 20px; }
-        .play-icon { font-size: 28px; color: var(--gaana-red); cursor: pointer; }
-        .track-img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; }
-        .track-name { font-weight: 700; color: #1a1a1a; font-size: 16px; }
+        /* --- MOBILE OPTIMIZED TRACK LIST --- */
+        .track-list { width: 100%; display: flex; flex-direction: column; position: relative; z-index: 2; padding-left: 50px; box-sizing: border-box; }
+        
+        .track-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 10px;
+            border-bottom: 1px solid var(--line-color);
+            width: 100%;
+            box-sizing: border-box;
+            gap: 10px;
+        }
 
-        .buy-badge { 
-            background: #000; color: white; padding: 12px 25px; 
-            border-radius: 6px; font-weight: bold; cursor: pointer; border: none; margin-right: 40px;
+        .track-no { font-weight: bold; color: #bbb; font-size: 14px; width: 25px; }
+        
+        .track-main { display: flex; align-items: center; gap: 12px; flex-grow: 1; min-width: 0; }
+        .play-icon { font-size: 24px; color: var(--gaana-red); cursor: pointer; flex-shrink: 0; }
+        .track-img { width: 45px; height: 45px; border-radius: 6px; object-fit: cover; flex-shrink: 0; }
+        
+        .track-info { overflow: hidden; }
+        .track-name { font-weight: 700; color: #1a1a1a; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .track-sub { font-size: 11px; color: #888; }
+
+        .buy-badge.locked {
+            background: #999 !important;
+            color: white;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: bold;
+            cursor: not-allowed;
+            border: none;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 65px;
         }
 
         /* --- PLAYER BAR --- */
         .player-bar {
             position: fixed; bottom: 0; left: 0; width: 100%;
-            background: #121212; padding: 15px 40px;
+            background: #121212; padding: 10px 20px;
             display: flex; align-items: center; justify-content: space-between;
             z-index: 9999; color: white; box-sizing: border-box;
             border-top: 3px solid var(--gaana-red);
@@ -142,24 +168,13 @@
         @media (max-width: 850px) {
             body { flex-direction: column; }
             .sidebar { width: 100%; height: auto; position: relative; }
-            .main-wrapper { margin: 15px; margin-bottom: 160px; }
-            .header-section { padding: 30px 40px; }
-            .header-section h1 { font-size: 28px; }
+            .main-wrapper { margin: 10px; margin-bottom: 140px; }
+            .header-section { padding: 20px 60px; }
+            .header-section h1 { font-size: 24px; }
+            .main-wrapper::before { left: 45px; }
+            .track-list { padding-left: 45px; }
+            audio { width: 120px; }
         }
-
-        /* Purane buy-badge ke niche ye naya style paste karein */
-.buy-badge.locked {
-    background: #555 !important;
-    cursor: not-allowed !important;
-    opacity: 0.6;
-    pointer-events: none;
-    position: relative;
-}
-
-.buy-badge.locked::after {
-    content: ' 🔒';
-    font-size: 10px;
-}
     </style>
 </head>
 <body>
@@ -183,16 +198,8 @@
             </button>
             <div class="terms-sheet">
                 <div class="terms-content">
-                    <h5>1. Ownership</h5><p>AI generated via Suno AI. License provided for usage rights.</p>
-                    <h5>2. License Type</h5><p>Non-exclusive by default.</p>
-                    <h5>3. Usage Rights</h5><p>Allowed for YouTube, social media, and ads.</p>
-                    <h5>4. Restrictions</h5><p>No standalone reselling or streaming upload as own.</p>
-                    <h5>5. Copyright</h5><p>No 100% uniqueness guarantee due to AI nature.</p>
-                    <h5>6. Credit</h5><p>Optional: Praveen AI Music.</p>
-                    <h5>7. Refund</h5><p>Digital products are non-refundable.</p>
-                    <h5>8. Custom Orders</h5><p>Separate pricing for custom beats.</p>
-                    <h5>9. Exclusive License</h5><p>Available as a paid upgrade.</p>
-                    <h5>10. Termination</h5><p>Violation results in license cancellation.</p>
+                    <h5>1. Ownership</h5><p>AI generated via Suno AI.</p>
+                    <h5>2. Usage Rights</h5><p>Allowed for YouTube and Social Media.</p>
                 </div>
             </div>
         </div>
@@ -208,58 +215,53 @@
             <h1>Music Index</h1>
             <p>Original AI Song and Beat</p>
         </div>
-        <table class="track-list" id="trackList"></table>
+        <div class="track-list" id="trackList"></div>
     </div>
 
     <div class="player-bar">
-        <div style="display:flex; align-items:center; gap:15px;">
-            <img src="soft1.png" id="current-track-img" style="width:50px; height:50px; border-radius:6px; object-fit:cover;">
-            <div>
-                <div id="current-track-name" style="font-size:14px; font-weight:bold;">Select a track</div>
-                <div style="font-size:11px; color:#aaa;">Now Playing</div>
+        <div style="display:flex; align-items:center; gap:10px;">
+            <img src="soft1.png" id="current-track-img" style="width:40px; height:40px; border-radius:4px; object-fit:cover;">
+            <div class="track-info">
+                <div id="current-track-name" style="font-size:12px; font-weight:bold; white-space:nowrap;">Select track</div>
+                <div style="font-size:10px; color:#aaa;">Playing</div>
             </div>
         </div>
         <audio id="main-audio" controls onplay="updateIcons(true)" onpause="updateIcons(false)"><source src=""></audio>
-        <button class="buy-badge locked" style="background:var(--gaana-red); margin:0;">DOWNLOAD</button>
+        <button class="buy-badge locked"><span>DOWNLOAD</span><span>🔒</span></button>
     </div>
 
     <script>
     function toggleTerms() { document.getElementById('termsBox').classList.toggle('active'); }
 
-    // --- AUTOMATION: Yahan naye gaane add karte jayein ---
     const myTracks = [
         { name: "Victory 1", img: "steel1.png", audio: "steel1.mp3" },
-        { name: "Victory", img: "steel2.png", audio: "steel2.mp3" },
+        { name: "Victory 2", img: "steel2.png", audio: "steel2.mp3" },
         { name: "Soft 1", img: "soft1.png", audio: "soft1.mp3" },
         { name: "Soft 2", img: "soft2.png", audio: "soft2.mp3" },
         { name: "Wind Piano 1", img: "water1.png", audio: "water1.mp3" },
         { name: "Wind Piano 2", img: "water2.png", audio: "water2.mp3" },
         { name: "Rain Glass 1", img: "r1.png", audio: "r1.mp3" },
         { name: "Rain Glass 2", img: "r2.png", audio: "r2.mp3" }
-        // Naya gaana yahan comma (,) laga kar add karein
     ];
 
-    const table = document.getElementById('trackList');
+    const listContainer = document.getElementById('trackList');
     let currentPlayingId = null;
 
     myTracks.forEach((track, index) => {
         const num = (index + 1) < 10 ? '0' + (index + 1) : (index + 1);
-        table.innerHTML += `
-        <tr class="track-item">
-            <td class="track-no">${num}</td>
-            <td class="track-main">
+        listContainer.innerHTML += `
+        <div class="track-item">
+            <div class="track-no">${num}</div>
+            <div class="track-main">
                 <i class="fas fa-play-circle play-icon" id="icon-${index}" onclick="playTrack(${index})"></i>
                 <img src="${track.img}" class="track-img">
-                <div>
+                <div class="track-info">
                     <div class="track-name">${track.name}</div>
-                    <div style="font-size:12px; color:#888;">Original AI Audio</div>
+                    <div class="track-sub">AI Audio</div>
                 </div>
-            </td>
-            <td style="text-align: right;">
-                
-<button class="buy-badge locked">BUY ₹29</button>
-            </td>
-        </tr>`;
+            </div>
+            <button class="buy-badge locked">BUY ₹29 🔒</button>
+        </div>`;
     });
 
     function playTrack(index) {
