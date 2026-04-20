@@ -139,82 +139,95 @@
             border-top: 3px solid var(--gaana-red);
         }
 
+        /* --- MOBILE OPTIMIZATION (ONLY STYLE FIX) --- */
         @media (max-width: 850px) {
-    body { 
-        flex-direction: column; 
+    body {
+        flex-direction: column;
+        background-color: var(--sidebar-red); /* Taki top area red rahe */
     }
 
-    .sidebar { 
-        width: 100%; 
-        height: auto; 
-        position: relative; 
+    /* Sidebar ko mobile par simple stack karein */
+    .sidebar {
+        width: 100% !important;
+        height: auto !important;
+        position: relative !important;
+        padding: 10px 15px !important;
     }
 
-    .main-wrapper { 
-        margin: 10px; 
-        margin-bottom: 170px; 
+    /* 🔥 MAIN FIX: White page ko mobile par poora fill karne ke liye */
+    .main-wrapper {
+        margin: 0 !important; /* Side ke saare gap khatam */
+        width: 100% !important;
+        border-radius: 0 !important; /* Mobile par sharp edges zyada acche lagte hain */
+        min-height: 100vh;
+        box-shadow: none;
     }
 
-    .header-section { 
-        padding: 25px 20px; 
+    /* Notebook wali laal line mobile par distraction lagti hai, ise hatayein */
+    .main-wrapper::before {
+        display: none !important;
     }
 
-    .header-section h1 { 
-        font-size: 26px; 
+    /* Music Index Text ko professional banayein */
+    .header-section {
+        padding: 40px 20px !important;
+        text-align: center;
+        border-bottom: 2px solid #000;
     }
 
-    /* 🔥 MAIN FIX START */
+    .header-section h1 {
+        font-size: 32px !important; /* Text size thoda bada aur saaf */
+        letter-spacing: 1px;
+        margin-bottom: 5px;
+    }
+
+    /* Songs ki list ko mobile par sahi se align karein */
+    .track-list {
+        width: 100% !important;
+        display: block;
+    }
+
     .track-item {
-        display: block;
-        padding: 15px 10px;
-    }
-
-    .track-item td {
-        display: block;
-        width: 100%;
-        padding: 8px 0;
-        border: none;
-    }
-
-    .track-no {
-        text-align: left;
-        font-size: 14px;
-        padding-left: 10px;
+        display: flex !important;
+        flex-direction: column;
+        padding: 20px 15px !important;
+        align-items: flex-start;
     }
 
     .track-main {
-        gap: 12px;
-        padding-left: 10px;
+        width: 100%;
+        padding-left: 0 !important;
+        display: flex;
+        align-items: center;
+        gap: 15px;
     }
 
-    .track-img {
-        width: 50px;
-        height: 50px;
-    }
-
-    .track-name {
+    .track-no {
         font-size: 14px;
+        margin-bottom: 5px;
+        color: #888;
     }
 
+    /* Buy button ko poori width dena taaki click karna aasan ho */
     .buy-badge {
-        width: 100%;
-        margin: 10px 0 0 0;
-        padding: 10px;
-        font-size: 14px;
+        width: 100% !important;
+        margin-top: 15px !important;
+        text-align: center;
+        display: block;
     }
 
-    /* Player fix */
+    /* Player Bar Fix */
     .player-bar {
-        flex-direction: column;
-        gap: 10px;
-        padding: 10px;
+        padding: 10px !important;
+        flex-direction: column !important;
     }
-
-    .player-bar audio {
-        width: 100%;
+    
+    audio {
+        width: 100% !important;
     }
 }
     </style>
+ <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body>
 
@@ -280,22 +293,22 @@
     <script>
     function toggleTerms() { document.getElementById('termsBox').classList.toggle('active'); }
 
-    // --- AUTOMATION: Yahan naye gaane add karte jayein ---
+    // --- TRACK DATA: Price yahan paisa mein hai (2900 = ₹29) ---
     const myTracks = [
-        { name: "Victory 1", img: "steel1.png", audio: "steel1.mp3" },
-        { name: "Victory", img: "steel2.png", audio: "steel2.mp3" },
-        { name: "Soft 1", img: "soft1.png", audio: "soft1.mp3" },
-        { name: "Soft 2", img: "soft2.png", audio: "soft2.mp3" },
-        { name: "Wind Piano 1", img: "water1.png", audio: "water1.mp3" },
-        { name: "Wind Piano 2", img: "water2.png", audio: "water2.mp3" },
-        { name: "Rain Glass 1", img: "r1.png", audio: "r1.mp3" },
-        { name: "Rain Glass 2", img: "r2.png", audio: "r2.mp3" }
-        // Naya gaana yahan comma (,) laga kar add karein
+        { name: "Victory 1", img: "steel1.png", audio: "steel1.mp3", price: 2900 },
+        { name: "Victory", img: "steel2.png", audio: "steel2.mp3", price: 2900 },
+        { name: "Soft 1", img: "soft1.png", audio: "soft1.mp3", price: 2900 },
+        { name: "Soft 2", img: "soft2.png", audio: "soft2.mp3", price: 2900 },
+        { name: "Wind Piano 1", img: "water1.png", audio: "water1.mp3", price: 2900 },
+        { name: "Wind Piano 2", img: "water2.png", audio: "water2.mp3", price: 2900 },
+        { name: "Rain Glass 1", img: "r1.png", audio: "r1.mp3", price: 2900 },
+        { name: "Rain Glass 2", img: "r2.png", audio: "r2.mp3", price: 2900 }
     ];
 
     const table = document.getElementById('trackList');
     let currentPlayingId = null;
 
+    // Table generate karne ka loop
     myTracks.forEach((track, index) => {
         const num = (index + 1) < 10 ? '0' + (index + 1) : (index + 1);
         table.innerHTML += `
@@ -310,12 +323,36 @@
                 </div>
             </td>
             <td style="text-align: right;">
-                
-<button class="buy-badge locked">BUY ₹29</button>
+                <button class="buy-badge" onclick="payNow('${track.name}', ${track.price})">BUY ₹${track.price/100}</button>
             </td>
         </tr>`;
     });
 
+    // --- RAZORPAY PAYMENT FUNCTION ---
+    function payNow(trackName, amount) {
+        var options = {
+            "key": "rzp_test_SfeBhuGxbBJW1E", // 👈 Yahan apna Razorpay Test Key ID dalein
+            "amount": amount, 
+            "currency": "INR",
+            "name": "Praveen AI Music Store",
+            "description": "Purchase: " + trackName,
+            "handler": function (response){
+                // Payment success hone ke baad ye message aayega
+                alert("Dhanyawad! Payment Successful. ID: " + response.razorpay_payment_id);
+            },
+            "prefill": {
+                "name": "Praveen Fan",
+                "email": "customer@example.com"
+            },
+            "theme": {
+                "color": "#e72c30" // Aapke store ka red color
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+    }
+
+    // Audio Player Logic
     function playTrack(index) {
         const track = myTracks[index];
         const audioPlayer = document.getElementById('main-audio');
@@ -337,6 +374,6 @@
             document.getElementById(`icon-${currentPlayingId}`).className = isPlaying ? "fas fa-pause-circle play-icon" : "fas fa-play-circle play-icon";
         }
     }
-    </script>
+</script>
 </body>
 </html>
