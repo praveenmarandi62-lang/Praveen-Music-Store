@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Santhali AI Music Store</title>
+    <meta name="viewport" content="width=1024"> 
+    <title>Santhali AI Music Store | Official</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
@@ -19,182 +19,169 @@
         body { 
             font-family: 'Poppins', sans-serif; 
             margin: 0; 
-            display: flex; /* Sidebar Left, Main Right */
+            display: flex; 
             height: 100vh;
+            width: 1024px; 
             overflow: hidden; 
             background-color: #f4f4f4;
         }
 
-        /* --- 1. LEFT SIDEBAR (Everything inside scrollable) --- */
+        /* --- SIDEBAR --- */
         .sidebar {
-    width: 300px; 
-    background: var(--sidebar-red); 
-    padding: 20px; 
-    color: white; 
-    display: flex; 
-    flex-direction: column;
-    height: 100vh;
-    overflow-y: auto; /* Pura sidebar scroll hoga agar content lamba hai */
-    border-right: 1px solid rgba(0,0,0,0.1);
-    flex-shrink: 0;
-    padding-bottom: 120px; /* Player bar ke liye jagah */
-}
+            width: 300px; 
+            background: var(--sidebar-red); 
+            padding: 20px; 
+            color: white; 
+            display: flex; 
+            flex-direction: column;
+            height: 100vh;
+            overflow-y: auto; 
+            border-right: 1px solid rgba(0,0,0,0.1);
+            flex-shrink: 0;
+            padding-bottom: 120px;
+        }
 
-        /* Order: Profile First */
         .profile-area { text-align: center; margin-bottom: 20px; }
         .profile-pic {
-            width: 100px; height: 100px; 
+            width: 90px; height: 90px; 
             border-radius: 50%; border: 3px solid white;
             object-fit: cover; object-position: top;
             margin-bottom: 10px;
         }
 
-        /* Order: Social Links Second */
         .nav-link {
-            display: flex; align-items: center; gap: 12px; padding: 12px; 
+            display: flex; align-items: center; gap: 12px; padding: 10px; 
             color: white; text-decoration: none; border-radius: 6px;
             font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* Order: Terms Third */
-        .static-terms {
-            margin-top: 20px; background: rgba(0,0,0,0.1);
-            padding: 15px; border-radius: 8px; font-size: 11px;
+        /* EXACT TERMS SECTION */
+        .license-agreement {
+            font-size: 11px; 
+            line-height: 1.5; 
+            background: rgba(0,0,0,0.15);
+            padding: 15px; 
+            border-radius: 8px; 
+            margin-top: 15px;
         }
-        .static-terms h5 { margin: 0 0 10px 0; border-bottom: 1px solid white; }
+        .license-agreement h5 { margin: 0 0 10px 0; border-bottom: 1px solid white; font-size: 12px; }
+        .license-agreement p { margin: 8px 0; }
+        .license-agreement ul { padding-left: 15px; margin: 5px 0; }
 
-        /* Order: Support Last */
         .support-btn {
             display: flex; align-items: center; justify-content: center; gap: 8px;
             padding: 12px; border-radius: 6px; text-decoration: none;
             font-size: 12px; font-weight: 700; color: white; margin-top: 10px;
         }
 
-        /* --- 2. RIGHT MAIN INDEX --- */
+        /* --- MAIN CONTENT --- */
         .main-wrapper {
             flex-grow: 1;
             background: var(--notebook-bg);
             height: 100vh;
             overflow-y: auto;
-            padding-bottom: 150px; /* Prevent last songs hiding */
+            padding-bottom: 150px;
         }
 
         .header-section {
-            background: #fff; padding: 40px 20px;
+            background: #fff; padding: 30px;
             border-bottom: 2px solid #000; text-align: center;
         }
 
         .track-list { width: 100%; border-collapse: collapse; }
         .track-item td { border-bottom: 1px solid #eee; padding: 15px 20px; }
         .track-main { display: flex; align-items: center; gap: 15px; }
-        .play-icon { font-size: 26px; color: var(--gaana-red); cursor: pointer; }
+        .play-icon { font-size: 24px; color: var(--gaana-red); cursor: pointer; }
         .track-img { width: 50px; height: 50px; border-radius: 6px; object-fit: cover; }
+        .track-name { font-size: 14px; font-weight: bold; }
 
-        /* --- 3. SLIM PLAYER BAR (FIXED BOTTOM) --- */
+        /* --- PLAYER BAR --- */
         .player-bar {
-            position: fixed; bottom: 0; left: 0; width: 100%;
+            position: fixed; bottom: 0; left: 0; width: 1024px;
             background: #121212; height: 70px; 
             padding: 0 20px; display: flex; align-items: center; justify-content: space-between;
             z-index: 10000; color: white; border-top: 2px solid var(--gaana-red);
         }
 
-        .current-info { display: flex; align-items: center; gap: 10px; min-width: 160px; }
-        audio { height: 35px; flex-grow: 1; max-width: 500px; margin: 0 15px; }
+        .current-info { display: flex; align-items: center; gap: 10px; min-width: 200px; }
+        audio { height: 35px; flex-grow: 1; margin: 0 20px; }
         
         .action-btn {
             background: var(--gaana-red); color: white; border: none;
             padding: 10px 20px; border-radius: 5px; font-weight: bold;
-            font-size: 12px; cursor: pointer;
-        }
-
-        /* Mobile View Fix */
-        @media (max-width: 850px) {
-            body { flex-direction: column; overflow-y: auto; height: auto; }
-            .sidebar { width: 100%; height: auto; position: relative; padding-bottom: 20px; }
-            .main-wrapper { width: 100%; height: auto; padding-bottom: 120px; }
-            .player-bar { flex-direction: row; flex-wrap: wrap; height: auto; padding: 10px; justify-content: center; gap: 10px; }
-            .current-info { width: 100%; justify-content: center; }
-            audio { width: 100%; margin: 5px 0; }
+            font-size: 12px; cursor: pointer; white-space: nowrap;
         }
     </style>
 </head>
 <body>
 
     <div class="sidebar">
-    <div class="profile-area" style="text-align: center; margin-bottom: 25px;">
-        <img src="praveen-photo.jpg" class="profile-pic" onerror="this.src='https://via.placeholder.com/100'">
-        <div style="font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; font-size: 16px;">Santhali AI Music</div>
-    </div>
-    
-    <nav style="margin-bottom: 20px;">
-        <a href="#" class="nav-link"><i class="fas fa-home"></i> Home</a>
-        <a href="https://youtube.com/@praveenaimusic" class="nav-link" target="_blank"><i class="fab fa-youtube"></i> YouTube</a>
-        <a href="https://facebook.com" class="nav-link" target="_blank"><i class="fab fa-facebook"></i> Facebook</a>
-        <a href="https://instagram.com/praveenmarandi7" class="nav-link" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
-    </nav>
-
-    <div class="license-agreement" style="font-size: 11px; line-height: 1.5; background: rgba(0,0,0,0.1); padding: 15px; border-radius: 8px;">
-        <h5 style="margin: 0 0 12px 0; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 5px; font-size: 13px;">
-            🎧 MUSIC LICENSE AGREEMENT
-        </h5>
+        <div class="profile-area">
+            <img src="praveen-photo.jpg" class="profile-pic" onerror="this.src='https://via.placeholder.com/90'">
+            <div style="font-weight: 800; text-transform: uppercase; font-size: 16px;">Santhali AI Music</div>
+        </div>
         
-        <div style="display: flex; flex-direction: column; gap: 10px;">
-            <div><strong>1. Ownership:</strong> AI-generated via Suno AI. Seller provides usage license, not full ownership.</div>
-            <div><strong>2. License Type:</strong> Non-exclusive by default. Track can be sold to multiple clients.</div>
-            <div><strong>3. Usage:</strong> Allowed for YouTube, Social Media, Ads, and Monetization.</div>
-            <div><strong>4. Restrictions:</strong> No standalone reselling, no Spotify/Apple Music uploads, no ownership claims.</div>
-            <div><strong>5. Copyright:</strong> 100% uniqueness not guaranteed. Seller not liable for claims.</div>
-            <div><strong>6. Credit:</strong> Recommended: Music by Santhali AI Music.</div>
-            <div><strong>7. Refund:</strong> Digital product. Strictly no refunds after delivery.</div>
-            <div><strong>8. Custom:</strong> Custom music has separate pricing & terms.</div>
-            <div><strong>9. Exclusive:</strong> Available as paid upgrade (no resale by seller).</div>
-            <div><strong>10. Termination:</strong> Violation leads to instant license cancellation.</div>
+        <nav>
+            <a href="#" class="nav-link"><i class="fas fa-home"></i> Home</a>
+            <a href="https://youtube.com/@praveenaimusic" class="nav-link" target="_blank"><i class="fab fa-youtube"></i> YouTube</a>
+            <a href="https://facebook.com" class="nav-link" target="_blank"><i class="fab fa-facebook"></i> Facebook</a>
+            <a href="https://instagram.com/praveenmarandi7" class="nav-link" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+        </nav>
+
+        <div class="license-agreement">
+            <h5>🎧 MUSIC LICENSE AGREEMENT</h5>
+            <p><strong>1. Ownership:</strong> Seller provides a license, not full ownership.</p>
+            <p><strong>2. License Type:</strong> The same music may be sold or used for multiple clients unless an exclusive license is purchased separately.</p>
+            <p><strong>3. Usage Rights:</strong> Client can use in YT videos, social media, ads, and monetize content.</p>
+            <p><strong>4. Restrictions:</strong> Strictly NOT allowed to resell, claim ownership, or upload to Spotify/Apple Music as own.</p>
+            <p><strong>5. Copyright:</strong> AI-generated. 100% uniqueness not guaranteed. Seller not responsible for claims.</p>
+            <p><strong>6. Credit:</strong> No credit required.</p>
+            <p><strong>7. Refund Policy:</strong> No refunds for digital products once delivered.</p>
+            <p><strong>8. Custom Orders:</strong> Pricing and terms may vary.</p>
+            <p><strong>9. Exclusive License:</strong> Sold to only one client; seller won't resell (Optional upgrade).</p>
+            <p><strong>10. Termination:</strong> Violation results in license termination without notice.</p>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <a href="https://wa.me/919384522971" class="support-btn" style="background:var(--whatsapp-green);" target="_blank">
+                <i class="fab fa-whatsapp"></i> WhatsApp Support
+            </a>
+            <a href="mailto:praveenmarandi62@gmail.com" class="support-btn" style="background:var(--gmail-blue);">
+                <i class="fas fa-envelope"></i> Gmail Support
+            </a>
         </div>
     </div>
-
-    <div style="margin-top: 25px; padding-bottom: 30px;">
-        <a href="https://wa.me/919384522971" class="support-btn" style="background:var(--whatsapp-green);" target="_blank">
-            <i class="fab fa-whatsapp"></i> WhatsApp Support
-        </a>
-        <a href="mailto:praveenmarandi62@gmail.com" class="support-btn" style="background:var(--gmail-blue);">
-            <i class="fas fa-envelope"></i> Gmail Support
-        </a>
-    </div>
-</div>
 
     <div class="main-wrapper">
         <div class="header-section">
-            <h1 style="margin:0; font-weight: 900;">MUSIC INDEX</h1>
+            <h1 style="margin:0; font-weight: 900; letter-spacing: 1px;">MUSIC INDEX</h1>
         </div>
-        <table class="track-list" id="trackList">
-            </table>
+        <table class="track-list" id="trackList"></table>
     </div>
 
     <div class="player-bar">
         <div class="current-info">
-            <img src="logo.png" id="current-track-img" style="width:40px; height:40px; border-radius:4px;">
+            <img src="logo.png" id="current-track-img" style="width:40px; height:40px; border-radius:4px; object-fit: cover;">
             <div>
                 <div id="current-track-name" style="font-size:12px; font-weight:bold;">Select Track</div>
                 <div style="font-size:10px; color:#ccc;">Santhali AI</div>
             </div>
         </div>
-        
         <audio id="main-audio" controls controlsList="nodownload" oncontextmenu="return false;"></audio>
-        
         <button id="main-dl-btn" class="action-btn" onclick="payNow()">BUY & DOWNLOAD</button>
     </div>
 
     <script>
         const myTracks = [
-            { name: "Victory 1", img: "steel1.png", audio: "steel1.mp3", price: 2900 },
-            { name: "Victory 2", img: "steel2.png", audio: "steel2.mp3", price: 2900 },
-            { name: "Soft 1", img: "soft1.png", audio: "soft1.mp3", price: 2900 },
-            { name: "Soft 2", img: "soft2.png", audio: "soft2.mp3", price: 2900 },
-            { name: "Wind Piano 1", img: "water1.png", audio: "water1.mp3", price: 2900 },
-            { name: "Wind Piano 2", img: "water2.png", audio: "water2.mp3", price: 2900 },
-            { name: "Rain Glass 1", img: "r1.png", audio: "r1.mp3", price: 2900 },
-            { name: "Rain Glass 2", img: "r2.png", audio: "r2.mp3", price: 2900 }
-        ];
+    { name: "Victory 1", img: "steel1.png", audio: "steel1.mp3", price: 2900 },
+    { name: "Victory 2", img: "steel2.png", audio: "steel2.mp3", price: 2900 },
+    { name: "Piano 1", img: "soft1.png", audio: "soft1.mp3", price: 2900 },
+    { name: "Piano 2", img: "soft2.png", audio: "soft2.mp3", price: 2900 },
+    { name: "Natura 1", img: "water1.png", audio: "water1.mp3", price: 2900 },
+    { name: "Natura 2", img: "water2.png", audio: "water2.mp3", price: 2900 },
+    { name: "Rain Glass 1", img: "r1.png", audio: "r1.mp3", price: 2900 },
+    { name: "Rain Glass 2", img: "r2.png", audio: "r2.mp3", price: 2900 }
+];
 
         const table = document.getElementById('trackList');
         let currentTrack = null;
@@ -203,7 +190,7 @@
             const num = (index + 1) < 10 ? '0' + (index + 1) : (index + 1);
             table.innerHTML += `
             <tr class="track-item">
-                <td style="color:#999; font-weight:bold; width:40px; text-align:center;">${num}</td>
+                <td style="color:#999; font-weight:bold; width:45px; text-align:center;">${num}</td>
                 <td class="track-main">
                     <i class="fas fa-play-circle play-icon" id="icon-${index}" onclick="playTrack(${index})"></i>
                     <img src="${track.img}" class="track-img">
@@ -218,9 +205,8 @@
         function playTrack(index) {
             const track = myTracks[index];
             const audio = document.getElementById('main-audio');
-            
-            // Reset Button to Original
             const btn = document.getElementById('main-dl-btn');
+            
             btn.innerHTML = "BUY & DOWNLOAD";
             btn.style.background = "#e72c30";
             btn.onclick = payNow;
@@ -242,30 +228,20 @@
             }
         }
 
-        function selectAndPay(index) {
-            playTrack(index);
-            payNow();
-        }
+        function selectAndPay(index) { playTrack(index); payNow(); }
 
         function payNow() {
-            if (currentTrack === null) {
-                alert("Pehle koi song select karein!");
-                return;
-            }
+            if (currentTrack === null) { alert("Pehle song select karein!"); return; }
             const track = myTracks[currentTrack];
             const amount = (track.price / 100).toFixed(2);
-            const upiUrl = `upi://pay?pa=9384522971@ptsbi&pn=Praveen%20AI&am=${amount}&cu=INR&tn=Buying%20${encodeURIComponent(track.name)}`;
+            window.location.href = `upi://pay?pa=9384522971@ptsbi&pn=Praveen%20AI&am=${amount}&cu=INR&tn=Buying%20${encodeURIComponent(track.name)}`;
 
-            window.location.href = upiUrl;
-
-            // WhatsApp Security Logic (Safe way)
             setTimeout(() => {
                 const btn = document.getElementById('main-dl-btn');
                 btn.innerHTML = "✅ SEND SCREENSHOT";
                 btn.style.background = "#25D366";
                 btn.onclick = function() {
-                    const msg = `Hi Praveen, maine "${track.name}" ke liye ₹${amount} pay kar diya hai. Screenshot attached.`;
-                    window.open(`https://wa.me/919384522971?text=${encodeURIComponent(msg)}`);
+                    window.open(`https://wa.me/919384522971?text=Hi Praveen, maine ${track.name} ke liye pay kar diya hai. Screenshot attached.`);
                 };
             }, 2000);
         }
