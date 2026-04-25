@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Praveen AI Music Store | Official</title>
+    <title>Santhali AI Music Store</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
@@ -18,171 +18,170 @@
 
         body { 
             font-family: 'Poppins', sans-serif; 
-            margin: 0; display: flex; height: 100vh;
-            overflow: hidden; background-color: var(--sidebar-red);
+            margin: 0; 
+            display: flex; /* Sidebar Left, Main Right */
+            height: 100vh;
+            overflow: hidden; 
+            background-color: #f4f4f4;
         }
 
-        /* Sidebar CSS ko isse update karein */
-         .sidebar {
-           width: 290px; 
-           background: var(--sidebar-red); 
-           padding: 15px; 
-           color: white; 
-           display: flex; 
-           flex-direction: column;
-           height: 100vh;
-           overflow-y: auto; /* Scroll chalu rahega */
-           border-right: 1px solid rgba(255,255,255,0.1);
-           flex-shrink: 0;
-           padding-bottom: 100px; /* Yeh line add karein: Isse niche jagah ban jayegi */
-        }
+        /* --- 1. LEFT SIDEBAR (Everything inside scrollable) --- */
+        .sidebar {
+    width: 300px; 
+    background: var(--sidebar-red); 
+    padding: 20px; 
+    color: white; 
+    display: flex; 
+    flex-direction: column;
+    height: 100vh;
+    overflow-y: auto; /* Pura sidebar scroll hoga agar content lamba hai */
+    border-right: 1px solid rgba(0,0,0,0.1);
+    flex-shrink: 0;
+    padding-bottom: 120px; /* Player bar ke liye jagah */
+}
 
+        /* Order: Profile First */
+        .profile-area { text-align: center; margin-bottom: 20px; }
         .profile-pic {
-            width: 105px; height: 105px; border-radius: 50%; border: 3px solid white;
-            display: block; margin: 0 auto 10px; object-fit: cover; object-position: top; background: white;
+            width: 100px; height: 100px; 
+            border-radius: 50%; border: 3px solid white;
+            object-fit: cover; object-position: top;
+            margin-bottom: 10px;
         }
 
+        /* Order: Social Links Second */
         .nav-link {
-            display: flex; align-items: center; gap: 10px; padding: 10px; 
-            color: white; text-decoration: none; border-radius: 6px; font-size: 12px;
+            display: flex; align-items: center; gap: 12px; padding: 12px; 
+            color: white; text-decoration: none; border-radius: 6px;
+            font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
+        /* Order: Terms Third */
         .static-terms {
-            margin-top: 15px; background: rgba(0,0,0,0.15); padding: 12px; border-radius: 8px; font-size: 10px;
+            margin-top: 20px; background: rgba(0,0,0,0.1);
+            padding: 15px; border-radius: 8px; font-size: 11px;
         }
+        .static-terms h5 { margin: 0 0 10px 0; border-bottom: 1px solid white; }
 
+        /* Order: Support Last */
         .support-btn {
             display: flex; align-items: center; justify-content: center; gap: 8px;
-            padding: 10px; border-radius: 6px; text-decoration: none;
+            padding: 12px; border-radius: 6px; text-decoration: none;
             font-size: 12px; font-weight: 700; color: white; margin-top: 10px;
         }
 
-        /* --- MAIN WRAPPER --- */
+        /* --- 2. RIGHT MAIN INDEX --- */
         .main-wrapper {
-            flex-grow: 1; background: var(--notebook-bg); height: 100vh;
-            overflow-y: auto; padding-bottom: 100px; 
+            flex-grow: 1;
+            background: var(--notebook-bg);
+            height: 100vh;
+            overflow-y: auto;
+            padding-bottom: 150px; /* Prevent last songs hiding */
         }
 
         .header-section {
-            background: #fcfcfc; padding: 30px 20px; border-bottom: 2px solid #000; text-align: center;
+            background: #fff; padding: 40px 20px;
+            border-bottom: 2px solid #000; text-align: center;
         }
 
         .track-list { width: 100%; border-collapse: collapse; }
-        .track-item td { border-bottom: 1px solid #eee; padding: 12px 15px; }
-        .track-main { display: flex; align-items: center; gap: 12px; }
-        .play-icon { font-size: 24px; color: var(--gaana-red); cursor: pointer; }
-        .track-img { width: 45px; height: 45px; border-radius: 5px; object-fit: cover; }
-        .track-name { font-weight: 700; font-size: 14px; }
+        .track-item td { border-bottom: 1px solid #eee; padding: 15px 20px; }
+        .track-main { display: flex; align-items: center; gap: 15px; }
+        .play-icon { font-size: 26px; color: var(--gaana-red); cursor: pointer; }
+        .track-img { width: 50px; height: 50px; border-radius: 6px; object-fit: cover; }
 
-        /* --- SLIM PLAYER BAR --- */
+        /* --- 3. SLIM PLAYER BAR (FIXED BOTTOM) --- */
         .player-bar {
-         position: fixed; 
-         bottom: 0; 
-         left: 0; 
-         width: 100%;
-         z-index: 9999; /* Isse player upar rahega */
-         background: #121212;
-         height: 65px;
-        /* Baaki style pehle jaisa... */
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: #121212; height: 70px; 
+            padding: 0 20px; display: flex; align-items: center; justify-content: space-between;
+            z-index: 10000; color: white; border-top: 2px solid var(--gaana-red);
         }
 
         .current-info { display: flex; align-items: center; gap: 10px; min-width: 160px; }
-        audio { height: 32px; flex-grow: 1; max-width: 500px; }
+        audio { height: 35px; flex-grow: 1; max-width: 500px; margin: 0 15px; }
         
-        .main-action-btn { 
-            background: var(--gaana-red); color: white; border: none; 
-            padding: 8px 15px; border-radius: 4px; font-weight: bold; 
-            font-size: 11px; cursor: pointer; text-transform: uppercase;
+        .action-btn {
+            background: var(--gaana-red); color: white; border: none;
+            padding: 10px 20px; border-radius: 5px; font-weight: bold;
+            font-size: 12px; cursor: pointer;
         }
 
-        /* Media Query ke andar main-wrapper ko update karein */
-          @media (max-width: 850px) {
-         .main-wrapper { 
-          width: 100%; 
-          height: auto; 
-          padding-bottom: 150px !important; /* Mobile mein zyada jagah chhodein */
-        }
-         .sidebar {
-          padding-bottom: 20px; /* Mobile mein sidebar lamba nahi hota toh yahan padding kam */
-        }
-
-        }
-         /* Desktop ke liye bhi main-wrapper ki padding check karein */
-         .main-wrapper {
-          flex-grow: 1;
-          background: var(--notebook-bg);
-          height: 100vh;
-          overflow-y: auto;
-          padding-bottom: 120px; /* Desktop par bhi safe side jagah rakhein */
-
+        /* Mobile View Fix */
+        @media (max-width: 850px) {
+            body { flex-direction: column; overflow-y: auto; height: auto; }
+            .sidebar { width: 100%; height: auto; position: relative; padding-bottom: 20px; }
+            .main-wrapper { width: 100%; height: auto; padding-bottom: 120px; }
+            .player-bar { flex-direction: row; flex-wrap: wrap; height: auto; padding: 10px; justify-content: center; gap: 10px; }
+            .current-info { width: 100%; justify-content: center; }
+            audio { width: 100%; margin: 5px 0; }
         }
     </style>
 </head>
 <body>
 
     <div class="sidebar">
-        <div class="profile-area" style="text-align: center;">
-            <img src="praveen-photo.jpg" class="profile-pic" onerror="this.src='https://via.placeholder.com/105'">
-            <div style="font-weight: 800; font-size: 16px; text-transform: uppercase;">Praveen AI Music</div>
-        </div>
-        
-        <nav>
-            <a href="#" class="nav-link"><i class="fas fa-home"></i> Home</a>
-            <a href="https://youtube.com/@praveenaimusic" class="nav-link" target="_blank"><i class="fab fa-youtube"></i> YouTube</a>
-            <a href="https://instagram.com/praveenmarandi7" class="nav-link" target="_blank" style="color:white;"><i class="fab fa-instagram"></i> Instagram</a>
-        </nav>
-
-        <div class="static-terms">
-            <h5>📜 MUSIC LICENSE TERMS</h5>
-            <p>1. Ownership:This music/audio is generated using AI tools (Suno AI).</p> 
-            <p>  The seller (creator) provides a license to use the music, not full ownership unless explicitly agreed in writing.</p>
-            <p>2. Usage:The client is allowed to:</p>   
-            <p>* Use the music in YouTube videos, social media, advertisements, and other content</p>
-            <p>* Monetize videos/content that include this music </p>
-            <p>3. The client is allowed to use the music only as part of their content (e.g., videos, ads).</p>
-            <p>   The client is strictly NOT allowed to:</p>
-            <p> * Resell, redistribute, or share the music as a standalone file</p>
-            <p> * Sell or transfer the music to any third party</p>
-            <p> * Claim ownership or copyright of the music</p>
-            <p> * Upload the music to streaming platforms (Spotify, Apple Music, etc.) as their own</p>
-            <p> * The client may monetize their content using this music 
-                  but cannot sell or monetize the music separately in any form.</p>
-            <p>4. Refund: Due to the digital nature of the product, no refunds will be provided once delivered.</p>
-            <p>5. Custom music requests may include different pricing and licensing terms.</p>
-            <p>6. License: Any violation of these terms may result in license termination without prior notice.</p>
-            <p>7. Contact: For licensing inquiries, please reach out.</p>
-        </div>
-
-        <div class="support-section" style="margin-top: 15px; padding-bottom: 20px;">
-    <a href="https://wa.me/919384522971" class="support-btn" style="background:var(--whatsapp-green); display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: 700; color: white;" target="_blank">
-        <i class="fab fa-whatsapp"></i> WhatsApp Support
-    </a>
-
-    <a href="mailto:praveenmarandi62@gmail.com" class="support-btn" style="background:var(--gmail-blue); display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: 700; color: white; margin-top: 10px;">
-        <i class="fas fa-envelope"></i> Gmail Support
-    </a>
-</div>
+    <div class="profile-area" style="text-align: center; margin-bottom: 25px;">
+        <img src="praveen-photo.jpg" class="profile-pic" onerror="this.src='https://via.placeholder.com/100'">
+        <div style="font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; font-size: 16px;">Santhali AI Music</div>
     </div>
+    
+    <nav style="margin-bottom: 20px;">
+        <a href="#" class="nav-link"><i class="fas fa-home"></i> Home</a>
+        <a href="https://youtube.com/@praveenaimusic" class="nav-link" target="_blank"><i class="fab fa-youtube"></i> YouTube</a>
+        <a href="https://facebook.com" class="nav-link" target="_blank"><i class="fab fa-facebook"></i> Facebook</a>
+        <a href="https://instagram.com/praveenmarandi7" class="nav-link" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+    </nav>
+
+    <div class="license-agreement" style="font-size: 11px; line-height: 1.5; background: rgba(0,0,0,0.1); padding: 15px; border-radius: 8px;">
+        <h5 style="margin: 0 0 12px 0; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 5px; font-size: 13px;">
+            🎧 MUSIC LICENSE AGREEMENT
+        </h5>
+        
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div><strong>1. Ownership:</strong> AI-generated via Suno AI. Seller provides usage license, not full ownership.</div>
+            <div><strong>2. License Type:</strong> Non-exclusive by default. Track can be sold to multiple clients.</div>
+            <div><strong>3. Usage:</strong> Allowed for YouTube, Social Media, Ads, and Monetization.</div>
+            <div><strong>4. Restrictions:</strong> No standalone reselling, no Spotify/Apple Music uploads, no ownership claims.</div>
+            <div><strong>5. Copyright:</strong> 100% uniqueness not guaranteed. Seller not liable for claims.</div>
+            <div><strong>6. Credit:</strong> Recommended: Music by Santhali AI Music.</div>
+            <div><strong>7. Refund:</strong> Digital product. Strictly no refunds after delivery.</div>
+            <div><strong>8. Custom:</strong> Custom music has separate pricing & terms.</div>
+            <div><strong>9. Exclusive:</strong> Available as paid upgrade (no resale by seller).</div>
+            <div><strong>10. Termination:</strong> Violation leads to instant license cancellation.</div>
+        </div>
+    </div>
+
+    <div style="margin-top: 25px; padding-bottom: 30px;">
+        <a href="https://wa.me/919384522971" class="support-btn" style="background:var(--whatsapp-green);" target="_blank">
+            <i class="fab fa-whatsapp"></i> WhatsApp Support
+        </a>
+        <a href="mailto:praveenmarandi62@gmail.com" class="support-btn" style="background:var(--gmail-blue);">
+            <i class="fas fa-envelope"></i> Gmail Support
+        </a>
+    </div>
+</div>
 
     <div class="main-wrapper">
         <div class="header-section">
-            <h2 style="margin:0; font-weight: 900; letter-spacing: 1px;">MUSIC STORE</h2>
+            <h1 style="margin:0; font-weight: 900;">MUSIC INDEX</h1>
         </div>
-        <table class="track-list" id="trackList"></table>
+        <table class="track-list" id="trackList">
+            </table>
     </div>
 
     <div class="player-bar">
         <div class="current-info">
-            <img src="logo.png" id="current-track-img" style="width:38px; height:38px; border-radius:4px; object-fit:cover;">
-            <div style="max-width: 110px; overflow: hidden;">
-                <div id="current-track-name" style="font-size:11px; font-weight:bold; white-space: nowrap; text-overflow: ellipsis;">Select Track</div>
-                <div style="font-size:9px; color:#aaa;">Praveen AI</div>
+            <img src="logo.png" id="current-track-img" style="width:40px; height:40px; border-radius:4px;">
+            <div>
+                <div id="current-track-name" style="font-size:12px; font-weight:bold;">Select Track</div>
+                <div style="font-size:10px; color:#ccc;">Santhali AI</div>
             </div>
         </div>
         
         <audio id="main-audio" controls controlsList="nodownload" oncontextmenu="return false;"></audio>
         
-        <button id="main-dl-btn" class="main-action-btn" onclick="payNow()">BUY & DOWNLOAD</button>
+        <button id="main-dl-btn" class="action-btn" onclick="payNow()">BUY & DOWNLOAD</button>
     </div>
 
     <script>
@@ -193,8 +192,8 @@
             { name: "Soft 2", img: "soft2.png", audio: "soft2.mp3", price: 2900 },
             { name: "Wind Piano 1", img: "water1.png", audio: "water1.mp3", price: 2900 },
             { name: "Wind Piano 2", img: "water2.png", audio: "water2.mp3", price: 2900 },
-            { name: "Happy Tune 1", img: "r1.png", audio: "r1.mp3", price: 2900 },
-            { name: "Happy Tune 2", img: "r2.png", audio: "r2.mp3", price: 2900},
+            { name: "Rain Glass 1", img: "r1.png", audio: "r1.mp3", price: 2900 },
+            { name: "Rain Glass 2", img: "r2.png", audio: "r2.mp3", price: 2900 }
         ];
 
         const table = document.getElementById('trackList');
@@ -204,14 +203,14 @@
             const num = (index + 1) < 10 ? '0' + (index + 1) : (index + 1);
             table.innerHTML += `
             <tr class="track-item">
-                <td style="color:#ccc; font-weight:bold; width:30px; text-align:center;">${num}</td>
+                <td style="color:#999; font-weight:bold; width:40px; text-align:center;">${num}</td>
                 <td class="track-main">
                     <i class="fas fa-play-circle play-icon" id="icon-${index}" onclick="playTrack(${index})"></i>
                     <img src="${track.img}" class="track-img">
                     <div class="track-name">${track.name}</div>
                 </td>
                 <td style="text-align: right;">
-                    <button class="main-action-btn" style="background:#000;" onclick="selectAndPay(${index})">₹${track.price/100}</button>
+                    <button class="action-btn" style="background:#000;" onclick="selectAndPay(${index})">₹${track.price/100}</button>
                 </td>
             </tr>`;
         });
@@ -220,10 +219,11 @@
             const track = myTracks[index];
             const audio = document.getElementById('main-audio');
             
-            // Reset player button to "Buy" when switching tracks
-            document.getElementById('main-dl-btn').innerHTML = "BUY & DOWNLOAD";
-            document.getElementById('main-dl-btn').style.background = "#e72c30";
-            document.getElementById('main-dl-btn').onclick = payNow;
+            // Reset Button to Original
+            const btn = document.getElementById('main-dl-btn');
+            btn.innerHTML = "BUY & DOWNLOAD";
+            btn.style.background = "#e72c30";
+            btn.onclick = payNow;
 
             if (currentTrack === index && !audio.paused) {
                 audio.pause();
@@ -248,34 +248,27 @@
         }
 
         function payNow() {
-    if (currentTrack === null) {
-        alert("Pehle koi song select karein!");
-        return;
-    }
-    
-    const track = myTracks[currentTrack];
-    const amount = (track.price / 100).toFixed(2);
-    const upiId = "9384522971@ptsbi"; 
-    const upiUrl = `upi://pay?pa=${upiId}&pn=Praveen%20AI%20Music&am=${amount}&cu=INR&tn=Buying%20${encodeURIComponent(track.name)}`;
+            if (currentTrack === null) {
+                alert("Pehle koi song select karein!");
+                return;
+            }
+            const track = myTracks[currentTrack];
+            const amount = (track.price / 100).toFixed(2);
+            const upiUrl = `upi://pay?pa=9384522971@ptsbi&pn=Praveen%20AI&am=${amount}&cu=INR&tn=Buying%20${encodeURIComponent(track.name)}`;
 
-    // User ko Payment App par bhejna
-    window.location.href = upiUrl;
+            window.location.href = upiUrl;
 
-    // Button ko badal kar WhatsApp Verification par set karna
-    setTimeout(() => {
-        const btn = document.getElementById('main-dl-btn');
-        btn.innerHTML = "✅ SEND SCREENSHOT TO DOWNLOAD";
-        btn.style.background = "#25D366"; // WhatsApp Green
-        
-        btn.onclick = function() {
-            const whatsappNumber = "919384522971";
-            const message = `Hi Praveen, maine "${track.name}" ke liye ₹${amount} pay kar diya hai. Ye raha screenshot. Kripya mujhe download link bhej dein.`;
-            window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`);
-        };
-    }, 2000);
-
-    alert("Payment App khul raha hai. Payment ke baad screenshot lein aur WhatsApp par bhej kar file lein.");
-}
+            // WhatsApp Security Logic (Safe way)
+            setTimeout(() => {
+                const btn = document.getElementById('main-dl-btn');
+                btn.innerHTML = "✅ SEND SCREENSHOT";
+                btn.style.background = "#25D366";
+                btn.onclick = function() {
+                    const msg = `Hi Praveen, maine "${track.name}" ke liye ₹${amount} pay kar diya hai. Screenshot attached.`;
+                    window.open(`https://wa.me/919384522971?text=${encodeURIComponent(msg)}`);
+                };
+            }, 2000);
+        }
     </script>
 </body>
 </html>
