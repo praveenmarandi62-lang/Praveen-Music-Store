@@ -22,11 +22,19 @@
             overflow: hidden; background-color: var(--sidebar-red);
         }
 
-        /* --- SIDEBAR --- */
-        .sidebar {
-            width: 290px; background: var(--sidebar-red); padding: 15px; 
-            color: white; display: flex; flex-direction: column;
-            height: 100vh; overflow-y: auto; border-right: 1px solid rgba(255,255,255,0.1); flex-shrink: 0;
+        /* Sidebar CSS ko isse update karein */
+         .sidebar {
+           width: 290px; 
+           background: var(--sidebar-red); 
+           padding: 15px; 
+           color: white; 
+           display: flex; 
+           flex-direction: column;
+           height: 100vh;
+           overflow-y: auto; /* Scroll chalu rahega */
+           border-right: 1px solid rgba(255,255,255,0.1);
+           flex-shrink: 0;
+           padding-bottom: 100px; /* Yeh line add karein: Isse niche jagah ban jayegi */
         }
 
         .profile-pic {
@@ -68,10 +76,14 @@
 
         /* --- SLIM PLAYER BAR --- */
         .player-bar {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            background: #121212; height: 65px; 
-            padding: 0 20px; display: flex; align-items: center; justify-content: space-between;
-            z-index: 10000; color: white; border-top: 2px solid var(--gaana-red); gap: 15px;
+         position: fixed; 
+         bottom: 0; 
+         left: 0; 
+         width: 100%;
+         z-index: 9999; /* Isse player upar rahega */
+         background: #121212;
+         height: 65px;
+        /* Baaki style pehle jaisa... */
         }
 
         .current-info { display: flex; align-items: center; gap: 10px; min-width: 160px; }
@@ -83,13 +95,26 @@
             font-size: 11px; cursor: pointer; text-transform: uppercase;
         }
 
-        @media (max-width: 850px) {
-            body { flex-direction: column; overflow-y: auto; height: auto; }
-            .sidebar { width: 100%; height: auto; position: relative; }
-            .main-wrapper { width: 100%; height: auto; }
-            .player-bar { height: auto; padding: 10px; flex-wrap: wrap; justify-content: center; }
-            .current-info { width: 100%; justify-content: center; }
-            audio { width: 100%; }
+        /* Media Query ke andar main-wrapper ko update karein */
+          @media (max-width: 850px) {
+         .main-wrapper { 
+          width: 100%; 
+          height: auto; 
+          padding-bottom: 150px !important; /* Mobile mein zyada jagah chhodein */
+        }
+         .sidebar {
+          padding-bottom: 20px; /* Mobile mein sidebar lamba nahi hota toh yahan padding kam */
+        }
+
+        }
+         /* Desktop ke liye bhi main-wrapper ki padding check karein */
+         .main-wrapper {
+          flex-grow: 1;
+          background: var(--notebook-bg);
+          height: 100vh;
+          overflow-y: auto;
+          padding-bottom: 120px; /* Desktop par bhi safe side jagah rakhein */
+
         }
     </style>
 </head>
@@ -128,9 +153,15 @@
             <p>7. Contact: For licensing inquiries, please reach out.</p>
         </div>
 
-        <a href="https://wa.me/919384522971" class="support-btn" style="background:var(--whatsapp-green);" target="_blank">
-            <i class="fab fa-whatsapp"></i> WhatsApp Support
-        </a>
+        <div class="support-section" style="margin-top: 15px; padding-bottom: 20px;">
+    <a href="https://wa.me/919384522971" class="support-btn" style="background:var(--whatsapp-green); display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: 700; color: white;" target="_blank">
+        <i class="fab fa-whatsapp"></i> WhatsApp Support
+    </a>
+
+    <a href="mailto:praveenmarandi62@gmail.com" class="support-btn" style="background:var(--gmail-blue); display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: 700; color: white; margin-top: 10px;">
+        <i class="fas fa-envelope"></i> Gmail Support
+    </a>
+</div>
     </div>
 
     <div class="main-wrapper">
