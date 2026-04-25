@@ -12,57 +12,36 @@
             --gaana-red: #e72c30;
             --whatsapp-green: #25D366;
             --gmail-blue: #4285F4;
-            --fb-blue: #1877F2;
-            --ig-pink: #E1306C;
         }
 
         * { box-sizing: border-box; }
 
         body { 
             font-family: 'Poppins', sans-serif; 
-            margin: 0; 
-            display: flex; 
-            height: 100vh;
-            overflow: hidden;
-            background-color: var(--sidebar-red);
+            margin: 0; display: flex; height: 100vh;
+            overflow: hidden; background-color: var(--sidebar-red);
         }
 
-        /* --- SIDEBAR (INDEPENDENT SCROLL) --- */
+        /* --- SIDEBAR --- */
         .sidebar {
-            width: 290px; 
-            background: var(--sidebar-red); 
-            padding: 15px; 
-            color: white; 
-            display: flex; 
-            flex-direction: column;
-            height: 100vh;
-            overflow-y: auto; /* SCROLLING ON */
-            border-right: 1px solid rgba(255,255,255,0.1);
-            flex-shrink: 0;
+            width: 290px; background: var(--sidebar-red); padding: 15px; 
+            color: white; display: flex; flex-direction: column;
+            height: 100vh; overflow-y: auto; border-right: 1px solid rgba(255,255,255,0.1); flex-shrink: 0;
         }
 
         .profile-pic {
-            width: 105px; height: 105px; 
-            border-radius: 50%; border: 3px solid white;
-            display: block; margin: 0 auto 10px;
-            object-fit: cover; object-position: top;
-            background: white;
+            width: 105px; height: 105px; border-radius: 50%; border: 3px solid white;
+            display: block; margin: 0 auto 10px; object-fit: cover; object-position: top; background: white;
         }
 
         .nav-link {
             display: flex; align-items: center; gap: 10px; padding: 10px; 
-            color: white; text-decoration: none; border-radius: 6px;
-            font-size: 12px; border-bottom: 1px solid rgba(255,255,255,0.1);
+            color: white; text-decoration: none; border-radius: 6px; font-size: 12px;
         }
-        .nav-link:hover { background: rgba(0,0,0,0.1); }
 
-        /* --- TERMS SECTION (FULL 10 POINTS) --- */
         .static-terms {
-            margin-top: 15px; background: rgba(0,0,0,0.15);
-            padding: 12px; border-radius: 8px; font-size: 10px;
+            margin-top: 15px; background: rgba(0,0,0,0.15); padding: 12px; border-radius: 8px; font-size: 10px;
         }
-        .static-terms h5 { margin: 0 0 8px; border-bottom: 1px solid white; padding-bottom: 3px;}
-        .static-terms p { margin: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 2px; }
 
         .support-btn {
             display: flex; align-items: center; justify-content: center; gap: 8px;
@@ -70,18 +49,14 @@
             font-size: 12px; font-weight: 700; color: white; margin-top: 10px;
         }
 
-        /* --- MAIN CONTENT --- */
+        /* --- MAIN WRAPPER --- */
         .main-wrapper {
-            flex-grow: 1;
-            background: var(--notebook-bg);
-            height: 100vh;
-            overflow-y: auto;
-            padding-bottom: 100px; 
+            flex-grow: 1; background: var(--notebook-bg); height: 100vh;
+            overflow-y: auto; padding-bottom: 100px; 
         }
 
         .header-section {
-            background: #fcfcfc; padding: 30px 20px;
-            border-bottom: 2px solid #000; text-align: center;
+            background: #fcfcfc; padding: 30px 20px; border-bottom: 2px solid #000; text-align: center;
         }
 
         .track-list { width: 100%; border-collapse: collapse; }
@@ -91,95 +66,82 @@
         .track-img { width: 45px; height: 45px; border-radius: 5px; object-fit: cover; }
         .track-name { font-weight: 700; font-size: 14px; }
 
-        .buy-btn {
-            background: #000; color: white; border: none; padding: 6px 12px;
-            border-radius: 4px; font-weight: bold; font-size: 11px; cursor: pointer;
-        }
-
         /* --- SLIM PLAYER BAR --- */
         .player-bar {
             position: fixed; bottom: 0; left: 0; width: 100%;
             background: #121212; height: 65px; 
             padding: 0 20px; display: flex; align-items: center; justify-content: space-between;
-            z-index: 10000; color: white; border-top: 2px solid var(--gaana-red);
-            gap: 15px;
+            z-index: 10000; color: white; border-top: 2px solid var(--gaana-red); gap: 15px;
         }
 
         .current-info { display: flex; align-items: center; gap: 10px; min-width: 160px; }
         audio { height: 32px; flex-grow: 1; max-width: 500px; }
-        .dl-btn { background: var(--gaana-red); color: white; border: none; padding: 8px 15px; border-radius: 4px; font-weight: bold; font-size: 11px; cursor: pointer;}
+        
+        .main-action-btn { 
+            background: var(--gaana-red); color: white; border: none; 
+            padding: 8px 15px; border-radius: 4px; font-weight: bold; 
+            font-size: 11px; cursor: pointer; text-transform: uppercase;
+        }
 
-        /* --- MOBILE --- */
         @media (max-width: 850px) {
             body { flex-direction: column; overflow-y: auto; height: auto; }
-            .sidebar { width: 100%; height: auto; position: relative; overflow: visible; }
+            .sidebar { width: 100%; height: auto; position: relative; }
             .main-wrapper { width: 100%; height: auto; }
-            .player-bar { height: auto; padding: 10px; flex-direction: row; flex-wrap: wrap; justify-content: center; }
+            .player-bar { height: auto; padding: 10px; flex-wrap: wrap; justify-content: center; }
             .current-info { width: 100%; justify-content: center; }
             audio { width: 100%; }
         }
     </style>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body>
 
     <div class="sidebar">
         <div class="profile-area" style="text-align: center;">
             <img src="praveen-photo.jpg" class="profile-pic" onerror="this.src='https://via.placeholder.com/105'">
-            <div style="font-weight: 800; font-size: 16px; text-transform: uppercase;">Praveen AI Music</div>
+            <div style="font-weight: 800; font-size: 16px; text-transform: uppercase;">Santhali AI Music</div>
         </div>
         
         <nav>
             <a href="#" class="nav-link"><i class="fas fa-home"></i> Home</a>
             <a href="https://youtube.com/@praveenaimusic" class="nav-link" target="_blank"><i class="fab fa-youtube"></i> YouTube</a>
-            <a href="https://facebook.com/your-profile" class="nav-link" target="_blank" style="color:white;"><i class="fab fa-facebook"></i> Facebook</a>
             <a href="https://instagram.com/praveenmarandi7" class="nav-link" target="_blank" style="color:white;"><i class="fab fa-instagram"></i> Instagram</a>
         </nav>
 
         <div class="static-terms">
             <h5>📜 License Terms</h5>
-            <p>1. Ownership: Suno AI + Praveen.</p>
-            <p>2. License Type: Non-exclusive.</p>
-            <p>3. Use: YouTube, Social, Ads.</p>
-            <p>4. Resale: Strictly prohibited.</p>
-            <p>5. Copyright: No 100% guarantee.</p>
-            <p>6. Credits: Praveen AI Music.</p>
-            <p>7. Refund: Digital items non-refundable.</p>
-            <p>8. Custom: Contact for pricing.</p>
-            <p>9. Upgrade: Exclusive available.</p>
-            <p>10. Rules: Violation ends license.</p>
+            <p>1. Ownership:Praveen AI Music.</p>
+            <p>2. Use: YouTube, Social,Instagram Ads.</p>
+            <p>3. Resale: Strictly prohibited.</p>
+            <p>4. Refund: Digital items non-refundable.</p>
+            <p>5. Rules: Violation ends license.</p>
+            <p>6. License: Commercial use allowed.</p>
+            <p>7. Contact: For licensing inquiries, please reach out.</p>
         </div>
 
-        <div style="margin-top: 15px; padding-bottom: 20px;">
-            <a href="https://wa.me/919384522971" class="support-btn" style="background:var(--whatsapp-green);" target="_blank">
-                <i class="fab fa-whatsapp"></i> WhatsApp
-            </a>
-            <a href="mailto:praveenmarandi62@gmail.com" class="support-btn" style="background:var(--gmail-blue);">
-                <i class="fas fa-envelope"></i> Email Support
-            </a>
-        </div>
+        <a href="https://wa.me/919384522971" class="support-btn" style="background:var(--whatsapp-green);" target="_blank">
+            <i class="fab fa-whatsapp"></i> WhatsApp Support
+        </a>
     </div>
 
     <div class="main-wrapper">
         <div class="header-section">
             <h2 style="margin:0; font-weight: 900; letter-spacing: 1px;">MUSIC STORE</h2>
-            <p style="color:var(--gaana-red); font-weight:bold; font-size: 12px; margin-top:5px;">Original Beats & Songs</p>
         </div>
         <table class="track-list" id="trackList"></table>
     </div>
 
     <div class="player-bar">
         <div class="current-info">
-            <img src="soft1.png" id="current-track-img" style="width:38px; height:38px; border-radius:4px; object-fit:cover;">
+            <img src="logo.png" id="current-track-img" style="width:38px; height:38px; border-radius:4px; object-fit:cover;">
             <div style="max-width: 110px; overflow: hidden;">
-                <div id="current-track-name" style="font-size:11px; font-weight:bold; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">Select Track</div>
+                <div id="current-track-name" style="font-size:11px; font-weight:bold; white-space: nowrap; text-overflow: ellipsis;">Select Track</div>
                 <div style="font-size:9px; color:#aaa;">Praveen AI</div>
             </div>
         </div>
         
-        <audio id="main-audio" controls></audio>
+        <audio id="main-audio" controls controlsList="nodownload" oncontextmenu="return false;"></audio>
         
-        <button class="dl-btn" onclick="alert('Unlock download after payment')">Download</button>
+        <button id="main-dl-btn" class="main-action-btn" onclick="payNow()">BUY & DOWNLOAD</button>
     </div>
 
     <script>
@@ -190,25 +152,25 @@
             { name: "Soft 2", img: "soft2.png", audio: "soft2.mp3", price: 2900 },
             { name: "Wind Piano 1", img: "water1.png", audio: "water1.mp3", price: 2900 },
             { name: "Wind Piano 2", img: "water2.png", audio: "water2.mp3", price: 2900 },
-            { name: "Rain Glass 1", img: "r1.png", audio: "r1.mp3", price: 2900 },
-            { name: "Rain Glass 2", img: "r2.png", audio: "r2.mp3", price: 2900 }
+            { name: "Happy Tune 1", img: "r1.png", audio: "r1.mp3", price: 2900 },
+            { name: "Happy Tune 2", img: "r2.png", audio: "r2.mp3", price: 2900},
         ];
 
         const table = document.getElementById('trackList');
-        let currentId = null;
+        let currentTrack = null;
 
         myTracks.forEach((track, index) => {
             const num = (index + 1) < 10 ? '0' + (index + 1) : (index + 1);
             table.innerHTML += `
             <tr class="track-item">
-                <td style="color:#ccc; font-weight:bold; width:30px; font-size:12px; text-align:center;">${num}</td>
+                <td style="color:#ccc; font-weight:bold; width:30px; text-align:center;">${num}</td>
                 <td class="track-main">
                     <i class="fas fa-play-circle play-icon" id="icon-${index}" onclick="playTrack(${index})"></i>
                     <img src="${track.img}" class="track-img">
                     <div class="track-name">${track.name}</div>
                 </td>
                 <td style="text-align: right;">
-                    <button class="buy-btn" onclick="payNow('${track.name}', ${track.price})">₹${track.price/100}</button>
+                    <button class="main-action-btn" style="background:#000;" onclick="selectAndPay(${index})">₹${track.price/100}</button>
                 </td>
             </tr>`;
         });
@@ -216,31 +178,63 @@
         function playTrack(index) {
             const track = myTracks[index];
             const audio = document.getElementById('main-audio');
-            if (currentId === index && !audio.paused) {
+            
+            // Reset player button to "Buy" when switching tracks
+            document.getElementById('main-dl-btn').innerHTML = "BUY & DOWNLOAD";
+            document.getElementById('main-dl-btn').style.background = "#e72c30";
+            document.getElementById('main-dl-btn').onclick = payNow;
+
+            if (currentTrack === index && !audio.paused) {
                 audio.pause();
                 document.getElementById(`icon-${index}`).className = "fas fa-play-circle play-icon";
             } else {
-                if (currentId !== null) {
-                    const prevIcon = document.getElementById(`icon-${currentId}`);
+                if (currentTrack !== null) {
+                    const prevIcon = document.getElementById(`icon-${currentTrack}`);
                     if(prevIcon) prevIcon.className = "fas fa-play-circle play-icon";
                 }
                 audio.src = track.audio;
                 document.getElementById('current-track-img').src = track.img;
                 document.getElementById('current-track-name').innerText = track.name;
                 audio.play();
-                currentId = index;
+                currentTrack = index;
                 document.getElementById(`icon-${index}`).className = "fas fa-pause-circle play-icon";
             }
         }
 
-        function payNow(name, price) {
-            var options = {
-                "key": "rzp_test_SfeBhuGxbBJW1E", 
-                "amount": price, "currency": "INR",
-                "name": "Praveen AI Store",
-                "handler": function (res){ alert("Payment Done!"); }
-            };
-            new Razorpay(options).open();
+        function selectAndPay(index) {
+            playTrack(index);
+            payNow();
+        }
+
+        function payNow() {
+            if (currentTrack === null) {
+                alert("Pehle koi song select karein!");
+                return;
+            }
+            
+            const track = myTracks[currentTrack];
+            const amount = (track.price / 100).toFixed(2);
+            const upiId = "9384522971@ptsbi"; 
+            const upiUrl = `upi://pay?pa=${upiId}&pn=Praveen%20AI%20Music&am=${amount}&cu=INR&tn=Buying%20${encodeURIComponent(track.name)}`;
+
+            // Redirect to Payment App
+            window.location.href = upiUrl;
+
+            // FAST SWITCH: Instant Download Button
+            setTimeout(() => {
+                const btn = document.getElementById('main-dl-btn');
+                btn.innerHTML = "⬇️ Click to Download";
+                btn.style.background = "#28a745";
+                btn.onclick = function() {
+                    const link = document.createElement('a');
+                    link.href = track.audio;
+                    link.download = track.name + ".mp3";
+                    link.click();
+                    alert("Download shuru ho gaya hai!");
+                };
+            }, 1500);
+
+            alert("Payment App khul raha hai. Pay karne ke baad wapas aayein.");
         }
     </script>
 </body>
