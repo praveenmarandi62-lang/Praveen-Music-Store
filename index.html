@@ -98,7 +98,7 @@
     <div class="sidebar">
         <div class="profile-area" style="text-align: center;">
             <img src="praveen-photo.jpg" class="profile-pic" onerror="this.src='https://via.placeholder.com/105'">
-            <div style="font-weight: 800; font-size: 16px; text-transform: uppercase;">Santhali AI Music</div>
+            <div style="font-weight: 800; font-size: 16px; text-transform: uppercase;">Praveen AI Music</div>
         </div>
         
         <nav>
@@ -108,13 +108,23 @@
         </nav>
 
         <div class="static-terms">
-            <h5>📜 License Terms</h5>
-            <p>1. Ownership:Praveen AI Music.</p>
-            <p>2. Use: YouTube, Social,Instagram Ads.</p>
-            <p>3. Resale: Strictly prohibited.</p>
-            <p>4. Refund: Digital items non-refundable.</p>
-            <p>5. Rules: Violation ends license.</p>
-            <p>6. License: Commercial use allowed.</p>
+            <h5>📜 MUSIC LICENSE TERMS</h5>
+            <p>1. Ownership:This music/audio is generated using AI tools (Suno AI).</p> 
+            <p>  The seller (creator) provides a license to use the music, not full ownership unless explicitly agreed in writing.</p>
+            <p>2. Usage:The client is allowed to:</p>   
+            <p>* Use the music in YouTube videos, social media, advertisements, and other content</p>
+            <p>* Monetize videos/content that include this music </p>
+            <p>3. The client is allowed to use the music only as part of their content (e.g., videos, ads).</p>
+            <p>   The client is strictly NOT allowed to:</p>
+            <p> * Resell, redistribute, or share the music as a standalone file</p>
+            <p> * Sell or transfer the music to any third party</p>
+            <p> * Claim ownership or copyright of the music</p>
+            <p> * Upload the music to streaming platforms (Spotify, Apple Music, etc.) as their own</p>
+            <p> * The client may monetize their content using this music 
+                  but cannot sell or monetize the music separately in any form.</p>
+            <p>4. Refund: Due to the digital nature of the product, no refunds will be provided once delivered.</p>
+            <p>5. Custom music requests may include different pricing and licensing terms.</p>
+            <p>6. License: Any violation of these terms may result in license termination without prior notice.</p>
             <p>7. Contact: For licensing inquiries, please reach out.</p>
         </div>
 
@@ -207,35 +217,34 @@
         }
 
         function payNow() {
-            if (currentTrack === null) {
-                alert("Pehle koi song select karein!");
-                return;
-            }
-            
-            const track = myTracks[currentTrack];
-            const amount = (track.price / 100).toFixed(2);
-            const upiId = "9384522971@ptsbi"; 
-            const upiUrl = `upi://pay?pa=${upiId}&pn=Praveen%20AI%20Music&am=${amount}&cu=INR&tn=Buying%20${encodeURIComponent(track.name)}`;
+    if (currentTrack === null) {
+        alert("Pehle koi song select karein!");
+        return;
+    }
+    
+    const track = myTracks[currentTrack];
+    const amount = (track.price / 100).toFixed(2);
+    const upiId = "9384522971@ptsbi"; 
+    const upiUrl = `upi://pay?pa=${upiId}&pn=Praveen%20AI%20Music&am=${amount}&cu=INR&tn=Buying%20${encodeURIComponent(track.name)}`;
 
-            // Redirect to Payment App
-            window.location.href = upiUrl;
+    // User ko Payment App par bhejna
+    window.location.href = upiUrl;
 
-            // FAST SWITCH: Instant Download Button
-            setTimeout(() => {
-                const btn = document.getElementById('main-dl-btn');
-                btn.innerHTML = "⬇️ Click to Download";
-                btn.style.background = "#28a745";
-                btn.onclick = function() {
-                    const link = document.createElement('a');
-                    link.href = track.audio;
-                    link.download = track.name + ".mp3";
-                    link.click();
-                    alert("Download shuru ho gaya hai!");
-                };
-            }, 1500);
+    // Button ko badal kar WhatsApp Verification par set karna
+    setTimeout(() => {
+        const btn = document.getElementById('main-dl-btn');
+        btn.innerHTML = "✅ SEND SCREENSHOT TO DOWNLOAD";
+        btn.style.background = "#25D366"; // WhatsApp Green
+        
+        btn.onclick = function() {
+            const whatsappNumber = "919384522971";
+            const message = `Hi Praveen, maine "${track.name}" ke liye ₹${amount} pay kar diya hai. Ye raha screenshot. Kripya mujhe download link bhej dein.`;
+            window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`);
+        };
+    }, 2000);
 
-            alert("Payment App khul raha hai. Pay karne ke baad wapas aayein.");
-        }
+    alert("Payment App khul raha hai. Payment ke baad screenshot lein aur WhatsApp par bhej kar file lein.");
+}
     </script>
 </body>
 </html>
