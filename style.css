@@ -250,6 +250,11 @@ body{
 /* MOBILE */
 @media(max-width:600px){
 
+  body{
+    padding-top:70px;
+    padding-bottom:120px;
+  }
+
   .search-bar{
     width:100%;
   }
@@ -259,6 +264,11 @@ body{
   }
 
   .song-list{
-    max-height:62vh;
+    max-height: calc(100vh - 260px); /* 👈 FIX */
+    overflow-y:auto;
+  }
+
+  .song-section{
+    padding-bottom:160px;
   }
 }
