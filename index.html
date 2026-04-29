@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Praveen Music Store</title>
+<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- Navbar -->
+<header class="navbar">
+    <div class="logo">🎧 Praveen Music</div>
+    <input type="text" placeholder="Search Songs..." class="search-bar">
+</header>
+
+<!-- Hero Banner -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>Unlimited Santali AI Music</h1>
+        <p>Stream Preview • Buy Full Song • Download Instantly</p>
+        <button class="hero-btn">Explore Now</button>
+    </div>
+</section>
+
+<!-- Categories -->
+<section class="category-section">
+    <h2>Top Categories</h2>
+    <div class="categories">
+        <button>Sad</button>
+        <button>Love</button>
+        <button>DJ Mix</button>
+        <button>LoFi</button>
+        <button>Dance</button>
+    </div>
+</section>
+
+<!-- Song List -->
+<section class="song-section">
+    <h2>Trending Songs</h2>
+    <div id="songList" class="song-list">
+        <!-- Songs from backend -->
+    </div>
+</section>
+
+<!-- Bottom Music Player -->
+<footer class="music-player">
+    <div class="player-left">
+        <img id="playerImg" src="" alt="">
+        <div>
+            <h4 id="playerTitle">No Song Selected</h4>
+            <p>Preview Player</p>
+        </div>
+    </div>
+
+    <audio 
+id="audioPlayer" 
+controls
+controlsList="nodownload"
+disablePictureInPicture
+></audio>
+
+    <button class="buy-btn">BUY NOW</button>
+</footer>
+
+<!-- index.html me </body> se just upar ye add karo -->
+<script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
