@@ -8,8 +8,8 @@
 body{
   background:#0f0f0f;
   color:#fff;
-  padding-top:75px;
-  padding-bottom:110px;
+  padding-top:80px;   /* 👈 ADD THIS */
+  padding-bottom:130px;
   overflow-x:hidden;
 }
 
@@ -108,18 +108,17 @@ body{
 
 /* SONG SECTION SPACE */
 .song-section{
-  padding-bottom:130px;
+  padding-top:10px;
+  padding-bottom:160px; /* player space */
 }
 
-/* SONG LIST */
 .song-list{
   display:flex;
   flex-direction:column;
   gap:10px;
 
-  max-height:68vh;
+  min-height:200px;   /* 👈 IMPORTANT FIX */
   overflow-y:auto;
-  padding-bottom:10px;
 }
 
 /* scrollbar */
