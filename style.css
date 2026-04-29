@@ -8,7 +8,8 @@
 body{
   background:#0f0f0f;
   color:#fff;
-  padding-bottom:110px;
+  padding-bottom:130px;
+  overflow-x:hidden;
 }
 
 /* Navbar */
@@ -18,9 +19,13 @@ body{
   align-items:center;
   padding:15px 18px;
   background:#151515;
-  position:sticky;
+
+  position:fixed;   /* 👈 sticky se better */
   top:0;
+  left:0;
+  width:100%;
   z-index:1000;
+
   box-shadow:0 2px 10px rgba(0,0,0,.4);
 }
 
@@ -84,6 +89,10 @@ body{
   font-size:20px;
 }
 
+.song-section{
+  padding-bottom:140px; /* player safe space */
+}
+
 .categories{
   display:flex;
   gap:10px;
@@ -100,13 +109,27 @@ body{
   white-space:nowrap;
 }
 
-/* Songs */
+/* SONG LIST */
 .song-list{
   display:flex;
   flex-direction:column;
   gap:12px;
+
+  max-height:65vh;
+  overflow-y:auto;
+  padding-bottom:20px;
 }
 
+/* scrollbar */
+.song-list::-webkit-scrollbar{
+  width:6px;
+}
+.song-list::-webkit-scrollbar-thumb{
+  background:#333;
+  border-radius:10px;
+}
+
+/* Song Card */
 .song-card{
   display:flex;
   align-items:center;
@@ -215,10 +238,6 @@ body{
 
 /* Mobile */
 @media(max-width:600px){
-  .navbar{
-    flex-direction:column;
-    gap:10px;
-  }
 
   .search-bar{
     width:100%;
@@ -226,5 +245,9 @@ body{
 
   .hero h1{
     font-size:22px;
+  }
+
+  .song-list{
+    max-height:55vh;
   }
 }
