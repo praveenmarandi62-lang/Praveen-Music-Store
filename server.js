@@ -11,9 +11,12 @@ const cloudinary = require("cloudinary").v2;
 dotenv.config();
 
 const app = express();
+
+/* Middleware */
 app.use(cors());
 app.use(express.json());
 
+/* Cloudinary Connect */
 connectCloudinary();
 
 /* MongoDB Connect */
@@ -33,54 +36,72 @@ const storage = new CloudinaryStorage({
 const upload = multer({ storage });
 
 /* Song Schema */
-const Song = mongoose.model("Song", new mongoose.Schema({
-  name: String,
-  img: String,
-  audio: String,
-  price: Number
-}));
+const Song = mongoose.model(
+  "Song",
+  new mongoose.Schema({
+    name: String,
+    img: String,
+    audio: String,
+    price: Number
+  })
+);
+
+/* Home Route */
+app.get("/", (req, res) => {
+  res.send("🎵 Praveen Music Backend Running");
+});
 
 /* Upload Song */
-app.post("/api/upload",
-upload.fields([{ name: "audio" }, { name: "img" }]),
-async (req, res) => {
-  try {
+app.post(
+  "/api/upload",
+  upload.fields([{ name: "audio" }, { name: "img" }]),
+  async (req, res) => {
+    try {
+      const { name, price } = req.body;
 
-    const { name, price } = req.body;
+      const newSong = new Song({
+        name,
+        img: req.files.img[0].path,
+        audio: req.files.audio[0].path,
+        price
+      });
 
-    const newSong = new Song({
-      name,
-      img: req.files.img[0].path,
-      audio: req.files.audio[0].path,
-      price
-    });
+      await newSong.save();
 
-    await newSong.save();
+      res.json({
+        success: true,
+        message: "Song Uploaded",
+        song: newSong
+      });
 
-    res.json({
-      success: true,
-      message: "Song Uploaded",
-      song: newSong
-    });
+    } catch (error) {
+      console.log(error);
 
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      success: false
-    });
+      res.status(500).json({
+        success: false,
+        message: "Upload Failed"
+      });
+    }
   }
-});
+);
 
 /* Get All Songs */
 app.get("/api/songs", async (req, res) => {
-  const songs = await Song.find().sort({ _id: -1 });
-  res.json(songs);
+  try {
+    const songs = await Song.find().sort({ _id: -1 });
+    res.json(songs);
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Songs Fetch Failed"
+    });
+  }
 });
 
 /* Cashfree Payment Create */
 app.post("/api/create-payment", async (req, res) => {
   try {
-
     const { amount, songId } = req.body;
 
     const response = await axios.post(
@@ -99,10 +120,9 @@ app.post("/api/create-payment", async (req, res) => {
 
         order_meta: {
           return_url:
-          "http://127.0.0.1:5500/index.html?paid=true&song=" + songId
+            "https://praveenmarandi62-lang.github.io/Praveen-Music-Store/index.html?paid=true&song=" + songId
         }
       },
-
       {
         headers: {
           "x-client-id": process.env.CASHFREE_APP_ID,
@@ -129,20 +149,29 @@ app.post("/api/create-payment", async (req, res) => {
 
 /* Download Song */
 app.get("/api/download/:id", async (req, res) => {
+  try {
+    const song = await Song.findById(req.params.id);
 
-  const song = await Song.findById(req.params.id);
+    if (!song) {
+      return res.status(404).send("Song Not Found");
+    }
 
-  if (!song) {
-    return res.status(404).send("Song Not Found");
+    res.json({
+      success: true,
+      file: song.audio
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Download Failed"
+    });
   }
-
-  res.json({
-    success: true,
-    file: song.audio
-  });
 });
 
-/* Server Start */
-app.listen(5000, () => {
-  console.log("🚀 Server Running on Port 5000");
+/* Dynamic Port for Render */
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log("🚀 Server Running on Port " + PORT);
 });
