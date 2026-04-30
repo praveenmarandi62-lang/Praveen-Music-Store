@@ -109,7 +109,7 @@ app.post("/api/create-payment", async (req, res) => {
     const response = await axios.post(
       "https://api.cashfree.com/pg/orders",
       {
-        order_amount: amount,
+        order_amount: Number(amount),
         order_currency: "INR",
         order_id: "order_" + Date.now(),
 
@@ -135,12 +135,12 @@ app.post("/api/create-payment", async (req, res) => {
       }
     );
 
-    res.json({
-      payment_link: response.data.payment_link
-    });
+    console.log("Cashfree Response:", response.data);
+
+    res.json(response.data);
 
   } catch (error) {
-    console.log(error.response?.data || error.message);
+    console.log("PAYMENT ERROR:", error.response?.data || error.message);
 
     res.status(500).json({
       success: false,
