@@ -7,7 +7,7 @@ const buyBtn = document.querySelector(".buy-btn");
 
 let currentSong = null;
 
-const API = "https://your-live-backend.com";
+const API = "https://praveen-music-store.onrender.com";
 
 /* LOAD SONGS */
 async function loadSongs() {
