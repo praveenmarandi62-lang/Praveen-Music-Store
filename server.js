@@ -117,21 +117,21 @@ app.post("/api/create-payment", async (req, res) => {
           customer_id: "cust_" + Date.now(),
           customer_name: "Music Buyer",
           customer_email: "buyer@example.com",
-          customer_phone: "9999999999"
+          customer_phone: "9384552971"
         },
 
         order_meta: {
           return_url:
-            "https://praveenmarandi62-lang.github.io/Praveen-Music-Store/index.html?paid=true&song=" + songId
+            "https://praveenmarandi62-lang.github.io/Praveen-Music-Store/" + songId
         }
       },
       {
         headers: {
-          "x-client-id": process.env.CASHFREE_APP_ID,
-          "x-client-secret": process.env.CASHFREE_SECRET_KEY,
-          "x-api-version": "2023-08-01",
-          "Content-Type": "application/json"
-        }
+ "x-client-id": process.env.CASHFREE_APP_ID,
+ "x-secret-key": process.env.CASHFREE_SECRET_KEY,
+ "x-api-version": "2023-08-01",
+ "Content-Type": "application/json"
+}
       }
     );
 
