@@ -13,7 +13,9 @@ dotenv.config();
 const app = express();
 
 /* Middleware */
-app.use(cors());
+app.use(cors({
+  origin: "https://praveenmarandi62-lang.github.io"
+}));
 app.use(express.json());
 
 /* Cloudinary Connect */
