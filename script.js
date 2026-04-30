@@ -1,4 +1,3 @@
-/* script.js Final Razorpay Payment Upgrade */
 
 const songList = document.getElementById("songList");
 const audioPlayer = document.getElementById("audioPlayer");
@@ -8,87 +7,113 @@ const buyBtn = document.querySelector(".buy-btn");
 
 let currentSong = null;
 
-const API = "http://localhost:5000";
+const API = "https://your-live-backend.com";
 
-/* Load Songs */
+/* LOAD SONGS */
 async function loadSongs() {
-  const res = await fetch(`${API}/api/songs`);
-  const songs = await res.json();
+  try {
+    const res = await fetch(`${API}/api/songs`);
 
-  songList.innerHTML = "";
+    if (!res.ok) throw new Error("API failed");
 
-  songs.forEach((song, index) => {
-    const card = document.createElement("div");
-    card.className = "song-card";
+    const songs = await res.json();
 
-    card.innerHTML = `
-      <div class="song-left">
-        <img src="${song.img}">
-        <div class="song-info">
-          <h3>${index + 1}. ${song.name}</h3>
-          <p>Premium Track</p>
+    if (!Array.isArray(songs)) throw new Error("Invalid data");
+
+    songList.innerHTML = "";
+
+    if (songs.length === 0) {
+      songList.innerHTML = "<p style='text-align:center'>No songs found</p>";
+      return;
+    }
+
+    songs.forEach((song, index) => {
+      const card = document.createElement("div");
+      card.className = "song-card";
+
+      card.innerHTML = `
+        <div class="song-left">
+          <img src="${song.img || ''}">
+          <div class="song-info">
+            <h3>${index + 1}. ${song.name || 'No Name'}</h3>
+            <p>Premium Track</p>
+          </div>
         </div>
-      </div>
 
-      <button class="play-btn">▶</button>
-      <button class="price-btn">₹${song.price}</button>
+        <div class="song-actions">
+          <button class="play-btn">▶</button>
+          <button class="price-btn">₹${song.price || 0}</button>
+        </div>
+      `;
+
+      card.querySelector(".play-btn").onclick = () => playSong(song);
+      card.querySelector(".price-btn").onclick = () => buySong(song);
+
+      songList.appendChild(card);
+    });
+
+  } catch (err) {
+    console.log("❌ SONG LOAD ERROR:", err);
+
+    songList.innerHTML = `
+      <p style="color:red; text-align:center; font-size:14px;">
+        Songs load nahi ho rahe (Backend issue)
+      </p>
     `;
-
-    card.querySelector(".play-btn").onclick = () => playSong(song);
-    card.querySelector(".price-btn").onclick = () => buySong(song);
-
-    songList.appendChild(card);
-  });
-}
-
-/* Preview */
-function playSong(song) {
-  currentSong = song;
-
-  audioPlayer.src = song.audio;
-  audioPlayer.play();
-
-  playerTitle.textContent = song.name;
-  playerImg.src = song.img;
-}
-
-/* Buy */
-async function buySong(song) {
-console.log("BUY BUTTON CLICKED", song);
-alert("Buy button clicked");
-  currentSong = song;
-
-  const res = await fetch(`${API}/api/create-payment`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      amount: song.price,
-      songId: song._id,
-      songName: song.name
-    })
-  });
-
-  const data = await res.json();
-
-  if (data.payment_link) {
-    window.location.href = data.payment_link;
-  } 
-  else if (data.payment_session_id && data.order_id) {
-    alert("Payment session created");
-    console.log(data);
-  } 
-  else {
-    alert("Payment start failed");
   }
 }
 
-/* Bottom Buy */
-buyBtn.onclick = ()=>{
-  if(currentSong){
+/* PLAY */
+function playSong(song) {
+  if (!song) return;
+
+  currentSong = song;
+
+  audioPlayer.src = song.audio || "";
+  audioPlayer.play().catch(err => console.log("Audio error:", err));
+
+  playerTitle.textContent = song.name || "No Song";
+  playerImg.src = song.img || "";
+}
+
+/* BUY */
+async function buySong(song) {
+  try {
+    if (!song) return;
+
+    currentSong = song;
+
+    const res = await fetch(`${API}/api/create-payment`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        amount: song.price,
+        songId: song._id,
+        songName: song.name
+      })
+    });
+
+    const data = await res.json();
+
+    if (data.payment_link) {
+      window.location.href = data.payment_link;
+    } else {
+      alert("Payment start failed");
+    }
+
+  } catch (err) {
+    console.log("PAYMENT ERROR:", err);
+    alert("Payment error");
+  }
+}
+
+/* BOTTOM BUY BUTTON */
+buyBtn.onclick = () => {
+  if (currentSong) {
     buySong(currentSong);
-  }else{
+  } else {
     alert("Select Song First");
   }
 };
