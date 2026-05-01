@@ -122,7 +122,7 @@ app.post("/api/create-payment", async (req, res) => {
 
         order_meta: {
           return_url:
-            "https://praveenmarandi62-lang.github.io/Praveen-Music-Store/" + songId
+            "https://praveenmarandi62-lang.github.io/Praveen-Music-Store/index.html?paid=true&song=" + songId
         }
       },
       {
