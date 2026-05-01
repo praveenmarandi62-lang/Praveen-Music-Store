@@ -127,10 +127,10 @@ app.post("/api/create-payment", async (req, res) => {
       },
       {
         headers: {
- "x-client-id": process.env.CASHFREE_APP_ID,
- "x-secret-key": process.env.CASHFREE_SECRET_KEY,
- "x-api-version": "2023-08-01",
- "Content-Type": "application/json"
+  "x-client-id": process.env.CASHFREE_APP_ID,
+  "x-client-secret": process.env.CASHFREE_SECRET_KEY,
+  "x-api-version": "2023-08-01",
+  "Content-Type": "application/json"
 }
       }
     );
