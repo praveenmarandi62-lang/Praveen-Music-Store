@@ -97,17 +97,21 @@ async function buySong(song) {
 
     const data = await res.json();
 
-    if (data.payment_link) {
-  window.location.href = data.payment_link;
-}
-else if (data.payment_session_id) {
-  alert("Order created but hosted link not returned");
-  console.log(data);
-}
-else {
-  alert("Payment start failed");
-  console.log(data);
-}
+    if (data.payment_session_id) {
+
+      const cashfree = Cashfree({
+        mode: "production"
+      });
+
+      cashfree.checkout({
+        paymentSessionId: data.payment_session_id,
+        redirectTarget: "_self"
+      });
+
+    } else {
+      alert("Payment start failed");
+      console.log(data);
+    }
 
   } catch (err) {
     console.log("PAYMENT ERROR:", err);
