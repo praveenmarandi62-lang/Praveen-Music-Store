@@ -27,8 +27,9 @@ const app = express();
 ========================= */
 
 app.use(cors({
-  origin:
-  "https://praveenmarandi62-lang.github.io"
+  origin: [
+    "https://praveenmarandi62-lang.github.io"
+  ]
 }));
 
 app.use(express.json());
