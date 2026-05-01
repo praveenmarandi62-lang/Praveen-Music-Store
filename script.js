@@ -8,6 +8,7 @@ const buyBtn = document.querySelector(".buy-btn");
 
 let currentSong = null;
 let selectedCard = null;
+let currentPlayButton = null;
 
 /* Payment success auto download */
 window.addEventListener("load", () => {
@@ -29,10 +30,22 @@ window.addEventListener("load", () => {
 /* Load Songs */
 async function loadSongs() {
   try {
+    songList.innerHTML = `<p style="text-align:center;">Loading songs...</p>`;
+
     const res = await fetch(`${API}/api/songs`);
+
+    if (!res.ok) throw new Error("API failed");
+
     const songs = await res.json();
 
+    if (!Array.isArray(songs)) throw new Error("Invalid songs data");
+
     songList.innerHTML = "";
+
+    if (songs.length === 0) {
+      songList.innerHTML = `<p style="text-align:center;">No songs found</p>`;
+      return;
+    }
 
     songs.forEach((song, index) => {
       const card = document.createElement("div");
@@ -40,7 +53,7 @@ async function loadSongs() {
 
       card.innerHTML = `
         <div class="song-left">
-          <img src="${song.img || ''}">
+          <img src="${song.img || ""}">
           <div class="song-info">
             <h3>${index + 1}. ${song.name || "No Name"}</h3>
             <p>Premium Track</p>
@@ -74,6 +87,7 @@ async function loadSongs() {
     });
 
   } catch (err) {
+    console.log("SONG LOAD ERROR:", err);
     songList.innerHTML = `<p style="color:red;text-align:center;">Songs load nahi ho rahe</p>`;
   }
 }
@@ -91,25 +105,65 @@ function selectSong(song, card) {
   playerImg.src = song.img || "";
 }
 
-/* Play Song */
-function playSong(song, button) {
-  audioPlayer.src = song.audio || "";
-  audioPlayer.play();
-
+/* Reset all play buttons */
+function resetPlayButtons() {
   document.querySelectorAll(".play-btn").forEach(btn => {
     btn.textContent = "▶";
     btn.classList.remove("playing");
   });
+}
+
+/* Play / Pause Song */
+function playSong(song, button) {
+  const isSameSong = currentSong && currentSong._id === song._id && audioPlayer.src.includes(song.audio);
+
+  if (isSameSong && !audioPlayer.paused) {
+    audioPlayer.pause();
+    button.textContent = "▶";
+    button.classList.remove("playing");
+    currentPlayButton = null;
+    return;
+  }
+
+  if (isSameSong && audioPlayer.paused) {
+    audioPlayer.play().catch(err => console.log("Audio error:", err));
+    resetPlayButtons();
+    button.textContent = "⏸";
+    button.classList.add("playing");
+    currentPlayButton = button;
+    return;
+  }
+
+  currentSong = song;
+  audioPlayer.src = song.audio || "";
+  audioPlayer.play().catch(err => console.log("Audio error:", err));
+
+  playerTitle.textContent = song.name || "No Song";
+  playerImg.src = song.img || "";
+
+  resetPlayButtons();
 
   button.textContent = "⏸";
   button.classList.add("playing");
+  currentPlayButton = button;
 }
 
+/* Bottom audio controls sync */
+audioPlayer.onpause = () => {
+  resetPlayButtons();
+};
+
+audioPlayer.onplay = () => {
+  if (currentPlayButton) {
+    resetPlayButtons();
+    currentPlayButton.textContent = "⏸";
+    currentPlayButton.classList.add("playing");
+  }
+};
+
 audioPlayer.onended = () => {
-  document.querySelectorAll(".play-btn").forEach(btn => {
-    btn.textContent = "▶";
-    btn.classList.remove("playing");
-  });
+  resetPlayButtons();
+  currentPlayButton = null;
 };
 
 /* Buy */
