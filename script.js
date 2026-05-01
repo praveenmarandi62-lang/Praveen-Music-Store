@@ -1,7 +1,3 @@
-/* =========================
-   script.js FINAL
-========================= */
-
 const API = "https://praveen-music-store.onrender.com";
 
 const songList = document.getElementById("songList");
@@ -11,105 +7,44 @@ const playerImg = document.getElementById("playerImg");
 const buyBtn = document.querySelector(".buy-btn");
 
 let currentSong = null;
+let selectedCard = null;
 
-/* =========================
-   PAYMENT SUCCESS DOWNLOAD
-========================= */
-
-window.addEventListener("load", async () => {
-
+/* Payment success auto download */
+window.addEventListener("load", () => {
   const params = new URLSearchParams(window.location.search);
 
-  const paid = params.get("paid");
-  const songId = params.get("song");
+  if (params.get("paid") === "true") {
+    const songId = params.get("song");
 
-  console.log("PAID:", paid);
-  console.log("SONG ID:", songId);
+    if (songId) {
+      alert("Payment Successful 🎉 Download starting...");
 
-  if (paid === "true" && songId) {
-
-    alert("✅ Payment Successful");
-
-    try {
-
-      const res = await fetch(`${API}/api/download/${songId}`);
-      const data = await res.json();
-
-      console.log("DOWNLOAD DATA:", data);
-
-      if (data.success && data.file) {
-
-        /* OPEN DOWNLOAD */
-        window.open(data.file, "_blank");
-
-        /* CLEAN URL */
-        window.history.replaceState(
-          {},
-          document.title,
-          window.location.pathname
-        );
-
-      } else {
-
-        alert("Download link not found");
-
-      }
-
-    } catch (err) {
-
-      console.log("DOWNLOAD ERROR:", err);
-      alert("Download failed");
-
+      setTimeout(() => {
+        window.location.href = `${API}/api/download/${songId}`;
+      }, 800);
     }
-
   }
-
 });
 
-/* =========================
-   LOAD SONGS
-========================= */
-
+/* Load Songs */
 async function loadSongs() {
-
   try {
-
     const res = await fetch(`${API}/api/songs`);
-
-    if (!res.ok) throw new Error("API failed");
-
     const songs = await res.json();
-
-    if (!Array.isArray(songs)) {
-      throw new Error("Invalid data");
-    }
 
     songList.innerHTML = "";
 
-    if (songs.length === 0) {
-
-      songList.innerHTML =
-      "<p style='text-align:center'>No songs found</p>";
-
-      return;
-    }
-
     songs.forEach((song, index) => {
-
       const card = document.createElement("div");
-
       card.className = "song-card";
 
       card.innerHTML = `
         <div class="song-left">
-
           <img src="${song.img || ''}">
-
           <div class="song-info">
-            <h3>${index + 1}. ${song.name || 'No Name'}</h3>
+            <h3>${index + 1}. ${song.name || "No Name"}</h3>
             <p>Premium Track</p>
           </div>
-
         </div>
 
         <div class="song-actions">
@@ -118,131 +53,105 @@ async function loadSongs() {
         </div>
       `;
 
-      card.querySelector(".play-btn").onclick =
-      () => playSong(song);
+      const playBtn = card.querySelector(".play-btn");
+      const priceBtn = card.querySelector(".price-btn");
 
-      card.querySelector(".price-btn").onclick =
-      () => buySong(song);
+      card.onclick = () => selectSong(song, card);
+
+      playBtn.onclick = (e) => {
+        e.stopPropagation();
+        selectSong(song, card);
+        playSong(song, playBtn);
+      };
+
+      priceBtn.onclick = (e) => {
+        e.stopPropagation();
+        selectSong(song, card);
+        buySong(song);
+      };
 
       songList.appendChild(card);
-
     });
 
   } catch (err) {
-
-    console.log("SONG LOAD ERROR:", err);
-
-    songList.innerHTML = `
-      <p style="color:red;text-align:center;">
-        Songs load nahi ho rahe
-      </p>
-    `;
+    songList.innerHTML = `<p style="color:red;text-align:center;">Songs load nahi ho rahe</p>`;
   }
 }
 
-/* =========================
-   PLAY SONG
-========================= */
-
-function playSong(song) {
-
-  if (!song) return;
-
+/* Select / Highlight Song */
+function selectSong(song, card) {
   currentSong = song;
 
-  audioPlayer.src = song.audio || "";
+  if (selectedCard) selectedCard.classList.remove("active-song");
 
-  audioPlayer.play()
-  .catch(err => console.log(err));
+  selectedCard = card;
+  selectedCard.classList.add("active-song");
 
-  playerTitle.textContent =
-  song.name || "No Song";
-
-  playerImg.src =
-  song.img || "";
-
+  playerTitle.textContent = song.name || "No Song";
+  playerImg.src = song.img || "";
 }
 
-/* =========================
-   BUY SONG
-========================= */
+/* Play Song */
+function playSong(song, button) {
+  audioPlayer.src = song.audio || "";
+  audioPlayer.play();
 
+  document.querySelectorAll(".play-btn").forEach(btn => {
+    btn.textContent = "▶";
+    btn.classList.remove("playing");
+  });
+
+  button.textContent = "⏸";
+  button.classList.add("playing");
+}
+
+audioPlayer.onended = () => {
+  document.querySelectorAll(".play-btn").forEach(btn => {
+    btn.textContent = "▶";
+    btn.classList.remove("playing");
+  });
+};
+
+/* Buy */
 async function buySong(song) {
-
   try {
-
-    if (!song) return;
-
-    currentSong = song;
-
     const res = await fetch(`${API}/api/create-payment`, {
-
       method: "POST",
-
       headers: {
         "Content-Type": "application/json"
       },
-
       body: JSON.stringify({
-
         amount: Number(song.price),
         songId: song._id,
         songName: song.name
-
       })
-
     });
 
     const data = await res.json();
 
-    console.log("PAYMENT DATA:", data);
-
     if (data.payment_session_id) {
-
-      const cashfree = Cashfree({
-        mode: "production"
-      });
+      const cashfree = Cashfree({ mode: "production" });
 
       cashfree.checkout({
-
-        paymentSessionId:
-        data.payment_session_id,
-
+        paymentSessionId: data.payment_session_id,
         redirectTarget: "_self"
-
       });
-
     } else {
-
       alert("Payment start failed");
-      console.log(data);
-
     }
 
   } catch (err) {
-
-    console.log("PAYMENT ERROR:", err);
     alert("Payment error");
-
   }
 }
 
-/* =========================
-   BOTTOM BUY BUTTON
-========================= */
-
+/* Bottom Buy */
 buyBtn.onclick = () => {
-
   if (currentSong) {
-
     buySong(currentSong);
-
   } else {
-
     alert("Select Song First");
-
   }
-
 };
 
 loadSongs();

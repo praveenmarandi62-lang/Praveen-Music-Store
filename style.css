@@ -271,3 +271,14 @@ body{
     padding-bottom:160px;
   }
 }
+
+.song-card.active-song{
+  border:1px solid #ff2c2c;
+  background:#261313;
+  box-shadow:0 0 12px rgba(255,44,44,.25);
+}
+
+.play-btn.playing{
+  background:#fff;
+  color:#ff2c2c;
+}
