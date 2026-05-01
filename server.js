@@ -117,6 +117,13 @@ app.post(
 
     try {
 
+      if (!req.files || !req.files.img || !req.files.audio) {
+  return res.status(400).json({
+    success: false,
+    message: "Image or audio file missing"
+  });
+}
+
       const { name, price } = req.body;
 
       const newSong = new Song({
