@@ -1,4 +1,34 @@
+const API = "https://praveen-music-store.onrender.com";
+const params = new URLSearchParams(window.location.search);
 
+window.addEventListener("load", async () => {
+  if (params.get("paid") === "true") {
+
+    const songId = params.get("song");
+
+    if (!songId) return;
+
+    alert("Payment Successful 🎉 Download starting...");
+
+    try {
+      const res = await fetch(`${API}/api/download/${songId}`);
+      const data = await res.json();
+
+      if (data.file) {
+        const a = document.createElement("a");
+        a.href = data.file;
+        a.download = "song.mp3";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      }
+
+    } catch (err) {
+      console.log("Download error:", err);
+      alert("Download failed");
+    }
+  }
+});
 const songList = document.getElementById("songList");
 const audioPlayer = document.getElementById("audioPlayer");
 const playerTitle = document.getElementById("playerTitle");
@@ -7,7 +37,6 @@ const buyBtn = document.querySelector(".buy-btn");
 
 let currentSong = null;
 
-const API = "https://praveen-music-store.onrender.com";
 
 /* LOAD SONGS */
 async function loadSongs() {
