@@ -278,48 +278,29 @@ app.post("/api/create-payment", async (req, res) => {
 
 });
 
-/* =========================
-   DOWNLOAD SONG
-========================= */
-
+/* Download Song - Force Download */
 app.get("/api/download/:id", async (req, res) => {
-
   try {
-
-    const song =
-    await Song.findById(req.params.id);
+    const song = await Song.findById(req.params.id);
 
     if (!song) {
-
-      return res.status(404).json({
-
-        success: false,
-        message: "Song Not Found"
-
-      });
-
+      return res.status(404).send("Song Not Found");
     }
 
-    res.json({
+    let fileUrl = song.audio;
+    const safeName = (song.name || "song").replace(/[^a-zA-Z0-9]/g, "_");
 
-      success: true,
-      file: song.audio
+    // Cloudinary force download
+    if (fileUrl.includes("/upload/")) {
+      fileUrl = fileUrl.replace("/upload/", `/upload/fl_attachment:${safeName}/`);
+    }
 
-    });
+    return res.redirect(fileUrl);
 
   } catch (error) {
-
     console.log(error);
-
-    res.status(500).json({
-
-      success: false,
-      message: "Download Failed"
-
-    });
-
+    res.status(500).send("Download Failed");
   }
-
 });
 
 /* =========================
