@@ -12,10 +12,6 @@ const dotenv = require("dotenv");
 
 const multer = require("multer");
 
-const {
-  CloudinaryStorage
-} = require("multer-storage-cloudinary");
-
 const cloudinary = require("cloudinary").v2;
 
 dotenv.config();
@@ -57,19 +53,13 @@ mongoose.connect(process.env.MONGO_URI)
 /* =========================
    STORAGE
 ========================= */
-
-const storage = new CloudinaryStorage({
-
-  cloudinary,
-
-  params: {
-    folder: "praveen_music_store",
-    resource_type: "auto"
+const storage = multer.memoryStorage();
+const upload = multer({
+  storage,
+  limits: {
+    fileSize: 50 * 1024 * 1024
   }
-
 });
-
-const upload = multer({ storage });
 
 /* =========================
    SONG MODEL
@@ -105,64 +95,66 @@ app.get("/", (req, res) => {
 ========================= */
 
 app.post(
-
   "/api/upload",
-
-  upload.fields([
-    { name: "audio" },
-    { name: "img" }
-  ]),
+  upload.fields([{ name: "audio" }, { name: "img" }]),
 
   async (req, res) => {
 
     try {
 
       if (!req.files || !req.files.img || !req.files.audio) {
-  return res.status(400).json({
-    success: false,
-    message: "Image or audio file missing"
-  });
-}
+        return res.status(400).json({
+          success: false,
+          message: "Image or audio missing"
+        });
+      }
 
       const { name, price } = req.body;
 
+      /* Upload image */
+      const imgUpload = await cloudinary.uploader.upload(
+        `data:${req.files.img[0].mimetype};base64,${req.files.img[0].buffer.toString("base64")}`,
+        {
+          folder: "praveen_music_store/images"
+        }
+      );
+
+      /* Upload audio */
+      const audioUpload = await cloudinary.uploader.upload(
+        `data:${req.files.audio[0].mimetype};base64,${req.files.audio[0].buffer.toString("base64")}`,
+        {
+          resource_type: "video",
+          folder: "praveen_music_store/audio"
+        }
+      );
+
       const newSong = new Song({
-
         name,
-
-        img: req.files.img[0].path,
-
-        audio: req.files.audio[0].path,
-
-        price
-
+        price,
+        img: imgUpload.secure_url,
+        audio: audioUpload.secure_url
       });
 
       await newSong.save();
 
       res.json({
-
         success: true,
         message: "Song Uploaded",
         song: newSong
-
       });
 
     } catch (error) {
 
-      console.log(error);
+      console.log("UPLOAD ERROR:", error);
 
       res.status(500).json({
-
         success: false,
         message: "Upload Failed"
-
       });
 
     }
 
   }
-
 );
 
 /* =========================
