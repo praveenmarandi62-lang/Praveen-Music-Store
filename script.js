@@ -10,21 +10,51 @@ let currentSong = null;
 let selectedCard = null;
 let currentPlayButton = null;
 
-/* Payment success auto download */
-window.addEventListener("load", () => {
+/* =========================
+   PAYMENT VERIFY + DOWNLOAD
+========================= */
+
+window.addEventListener("load", async () => {
+
   const params = new URLSearchParams(window.location.search);
 
-  if (params.get("paid") === "true") {
-    const songId = params.get("song");
+  const songId = params.get("song");
+  const orderId = params.get("order_id");
 
-    if (songId) {
-      alert("Payment Successful 🎉 Download starting...");
+  if (songId && orderId) {
 
-      setTimeout(() => {
-        window.location.href = `${API}/api/download/${songId}`;
-      }, 800);
+    try {
+
+      const res = await fetch(
+        `${API}/api/verify-payment/${orderId}/${songId}`
+      );
+
+      const data = await res.json();
+
+      console.log("VERIFY RESPONSE:", data);
+
+      if (data.paid && data.downloadUrl) {
+
+        alert("Payment Successful 🎉 Download starting...");
+
+        window.location.href = data.downloadUrl;
+
+      } else {
+
+        alert("Payment not completed. Download locked.");
+
+      }
+
+    } catch (err) {
+
+      console.log("VERIFY ERROR:", err);
+
+      alert("Payment verification failed");
+
     }
+
   }
+
 });
 
 /* Load Songs */
