@@ -184,122 +184,102 @@ app.get("/api/songs", async (req, res) => {
 });
 
 /* =========================
-   CREATE PAYMENT
+   CREATE PAYMENT - SECURE
 ========================= */
 
 app.post("/api/create-payment", async (req, res) => {
-
   try {
-
     const { amount, songId } = req.body;
 
+    const orderId = "order_" + Date.now();
+
     const response = await axios.post(
-
       "https://api.cashfree.com/pg/orders",
-
       {
-
         order_amount: Number(amount),
-
         order_currency: "INR",
-
-        order_id:
-        "order_" + Date.now(),
+        order_id: orderId,
 
         customer_details: {
-
-          customer_id:
-          "cust_" + Date.now(),
-
-          customer_name:
-          "Music Buyer",
-
-          customer_email:
-          "buyer@example.com",
-
-          customer_phone:
-          "9384552971"
-
+          customer_id: "cust_" + Date.now(),
+          customer_name: "Music Buyer",
+          customer_email: "buyer@example.com",
+          customer_phone: "9384552971"
         },
 
         order_meta: {
-
           return_url:
-          "https://praveenmarandi62-lang.github.io/Praveen-Music-Store/index.html?paid=true&song=" + songId
-
+            "https://praveenmarandi62-lang.github.io/Praveen-Music-Store/index.html?song=" +
+            songId +
+            "&order_id={order_id}"
         }
-
       },
-
       {
-
         headers: {
-
-          "x-client-id":
-          process.env.CASHFREE_APP_ID,
-
-          "x-client-secret":
-          process.env.CASHFREE_SECRET_KEY,
-
-          "x-api-version":
-          "2023-08-01",
-
-          "Content-Type":
-          "application/json"
-
+          "x-client-id": process.env.CASHFREE_APP_ID,
+          "x-client-secret": process.env.CASHFREE_SECRET_KEY,
+          "x-api-version": "2023-08-01",
+          "Content-Type": "application/json"
         }
-
       }
-
     );
 
-    console.log(
-      "CASHFREE RESPONSE:",
-      response.data
-    );
+    console.log("CASHFREE RESPONSE:", response.data);
 
     res.json(response.data);
 
   } catch (error) {
-
-    console.log(
-      "PAYMENT ERROR:",
-      error.response?.data || error.message
-    );
+    console.log("PAYMENT ERROR:", error.response?.data || error.message);
 
     res.status(500).json({
-
       success: false,
       message: "Payment Failed"
-
     });
-
   }
-
 });
 
-/* Download Song - Force Download */
-app.get("/api/download/:id", async (req, res) => {
+/* =========================
+   VERIFY PAYMENT
+========================= */
+
+app.get("/api/verify-payment/:orderId/:songId", async (req, res) => {
   try {
-    const song = await Song.findById(req.params.id);
+    const { orderId, songId } = req.params;
 
-    if (!song) {
-      return res.status(404).send("Song Not Found");
+    const response = await axios.get(
+      `https://api.cashfree.com/pg/orders/${orderId}`,
+      {
+        headers: {
+          "x-client-id": process.env.CASHFREE_APP_ID,
+          "x-client-secret": process.env.CASHFREE_SECRET_KEY,
+          "x-api-version": "2023-08-01"
+        }
+      }
+    );
+
+    console.log("VERIFY PAYMENT:", response.data);
+
+    if (response.data.order_status === "PAID") {
+      return res.json({
+        success: true,
+        paid: true,
+        downloadUrl: `https://praveen-music-store.onrender.com/api/download/${songId}`
+      });
     }
 
-    let fileUrl = song.audio;
-    const safeName = (song.name || "song").replace(/[^a-zA-Z0-9]/g, "_");
-
-    // Cloudinary force download
-    if (fileUrl.includes("/upload/")) {
-      fileUrl = fileUrl.replace("/upload/", `/upload/fl_attachment:${safeName}/`);
-    }
-
-    return res.redirect(fileUrl);
+    return res.json({
+      success: true,
+      paid: false,
+      status: response.data.order_status
+    });
 
   } catch (error) {
-    console.log(error);
-    res.status(500).send("Download Failed");
+    console.log("VERIFY ERROR:", error.response?.data || error.message);
+
+    res.status(500).json({
+      success: false,
+      message: "Payment verify failed"
+    });
   }
 });
 
