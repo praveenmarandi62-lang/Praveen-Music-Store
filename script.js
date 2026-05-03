@@ -508,3 +508,23 @@ document.querySelectorAll(".categories button")
   };
 
 });
+
+/* Disable Right Click */
+document.addEventListener("contextmenu", (e)=>{
+  e.preventDefault();
+});
+
+/* Disable Copy */
+document.addEventListener("copy", (e)=>{
+  e.preventDefault();
+});
+
+/* Disable Cut */
+document.addEventListener("cut", (e)=>{
+  e.preventDefault();
+});
+
+/* Disable Select */
+document.addEventListener("selectstart", (e)=>{
+  e.preventDefault();
+});
