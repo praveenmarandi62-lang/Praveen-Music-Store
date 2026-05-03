@@ -81,74 +81,47 @@ searchInput.addEventListener("input", () => {
 
 /* Load Songs */
 async function loadSongs() {
+
   try {
-    songList.innerHTML = `<p style="text-align:center;">Loading songs...</p>`;
 
-    const res = await fetch(`${API}/api/songs`);
+    songList.innerHTML =
+    `<p style="text-align:center;">Loading songs...</p>`;
 
-    if (!res.ok) throw new Error("API failed");
+    const res =
+    await fetch(`${API}/api/songs`);
 
-    const songs = await res.json();
+    if (!res.ok)
+    throw new Error("API failed");
+
+    const songs =
+    await res.json();
+
+    if (!Array.isArray(songs))
+    throw new Error("Invalid songs data");
+
     allSongs = songs;
-     filteredSongs = songs;
+    filteredSongs = songs;
 
-    /* Trending = latest 10 songs */
-    renderSongs(allSongs.slice(0, 10));
-
-    return;
-
-    if (!Array.isArray(songs)) throw new Error("Invalid songs data");
-
-    songList.innerHTML = "";
-
-    if (songs.length === 0) {
-      songList.innerHTML = `<p style="text-align:center;">No songs found</p>`;
-      return;
-    }
-
-    songs.forEach((song, index) => {
-      const card = document.createElement("div");
-      card.className = "song-card";
-
-      card.innerHTML = `
-        <div class="song-left">
-          <img src="${song.img || ""}">
-          <div class="song-info">
-            <h3>${index + 1}. ${song.name || "No Name"}</h3>
-            <p>Premium Track</p>
-          </div>
-        </div>
-
-        <div class="song-actions">
-          <button class="play-btn">▶</button>
-          <button class="price-btn">₹${song.price || 0}</button>
-        </div>
-      `;
-
-      const playBtn = card.querySelector(".play-btn");
-      const priceBtn = card.querySelector(".price-btn");
-
-      card.onclick = () => selectSong(song, card);
-
-      playBtn.onclick = (e) => {
-        e.stopPropagation();
-        selectSong(song, card);
-        playSong(song, playBtn);
-      };
-
-      priceBtn.onclick = (e) => {
-        e.stopPropagation();
-        selectSong(song, card);
-        buySong(song);
-      };
-
-      songList.appendChild(card);
-    });
+    /* Trending latest songs */
+    renderSongs(
+      allSongs.slice(0, 10)
+    );
 
   } catch (err) {
-    console.log("SONG LOAD ERROR:", err);
-    songList.innerHTML = `<p style="color:red;text-align:center;">Songs load nahi ho rahe</p>`;
+
+    console.log(
+      "SONG LOAD ERROR:",
+      err
+    );
+
+    songList.innerHTML =
+
+    `<p style="color:red;text-align:center;">
+      Songs load nahi ho rahe
+    </p>`;
+
   }
+
 }
 
 /* Select / Highlight Song */
