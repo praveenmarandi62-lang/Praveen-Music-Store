@@ -1,5 +1,6 @@
 const API = "https://praveen-music-store.onrender.com";
 
+const recentList = document.getElementById("recentList");
 const songList = document.getElementById("songList");
 const audioPlayer = document.getElementById("audioPlayer");
 const playerTitle = document.getElementById("playerTitle");
@@ -11,6 +12,26 @@ let filteredSongs = [];
 let currentSong = null;
 let selectedCard = null;
 let currentPlayButton = null;
+function showSkeleton(){
+  songList.innerHTML = "";
+
+  for(let i = 0; i < 5; i++){
+    songList.innerHTML += `
+      <div class="song-card skeleton-card">
+        <div class="song-left">
+          <div class="skeleton-img"></div>
+          <div class="song-info">
+            <div class="skeleton-line big"></div>
+            <div class="skeleton-line small"></div>
+          </div>
+        </div>
+          <div class="skeleton-btn"></div>
+          <div class="skeleton-btn"></div>
+        </div>
+      </div>
+    `;
+  }
+}
 
 /* =========================
    PAYMENT VERIFY + DOWNLOAD
@@ -84,8 +105,7 @@ async function loadSongs() {
 
   try {
 
-    songList.innerHTML =
-    `<p style="text-align:center;">Loading songs...</p>`;
+    showSkeleton();
 
     const res =
     await fetch(`${API}/api/songs`);
@@ -127,6 +147,28 @@ async function loadSongs() {
 /* Select / Highlight Song */
 function selectSong(song, card) {
   currentSong = song;
+
+  /* Save recently played */
+
+let recentSongs =
+JSON.parse(
+  localStorage.getItem("recentSongs")
+) || [];
+
+recentSongs =
+recentSongs.filter(
+  s => s._id !== song._id
+);
+
+recentSongs.unshift(song);
+
+recentSongs =
+recentSongs.slice(0, 10);
+
+localStorage.setItem(
+  "recentSongs",
+  JSON.stringify(recentSongs)
+);
 
   if (selectedCard) selectedCard.classList.remove("active-song");
 
@@ -204,8 +246,8 @@ async function buySong(song) {
     const res = await fetch(`${API}/api/create-payment`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
-      },
+  "Content-Type": "application/json",
+},
       body: JSON.stringify({
         amount: Number(song.price),
         songId: song._id,
@@ -240,7 +282,83 @@ buyBtn.onclick = () => {
   }
 };
 
+/* Recently Played */
+function loadRecentlyPlayed(){
+
+  const recentSongs =
+  JSON.parse(localStorage.getItem("recentSongs")) || [];
+
+  if(!recentList) return;
+
+  recentList.innerHTML = "";
+
+  if(recentSongs.length === 0){
+
+    recentList.innerHTML =
+
+    `<p style="text-align:center;color:#aaa;">
+      No recent songs
+    </p>`;
+
+    return;
+
+  }
+
+  recentSongs.forEach((song) => {
+
+    const card =
+    document.createElement("div");
+
+    card.className = "song-card";
+
+    card.innerHTML = `
+
+      <div class="song-left">
+
+        <img src="${song.img || ""}">
+
+        <div class="song-info">
+
+          <h3>${song.name || "No Name"}</h3>
+
+          <p>Recently Played</p>
+
+        </div>
+
+      </div>
+
+      <div class="song-actions">
+
+        <button class="play-btn">▶</button>
+
+      </div>
+
+    `;
+
+    const playBtn =
+    card.querySelector(".play-btn");
+
+    card.onclick = () =>
+    selectSong(song, card);
+
+    playBtn.onclick = (e) => {
+
+      e.stopPropagation();
+
+      selectSong(song, card);
+
+      playSong(song, playBtn);
+
+    };
+
+    recentList.appendChild(card);
+
+  });
+
+}
+
 loadSongs();
+loadRecentlyPlayed();
 
 function renderSongs(songs){
 
@@ -257,6 +375,11 @@ function renderSongs(songs){
     const card = document.createElement("div");
     card.className = "song-card";
 
+    const favorites =
+    JSON.parse(localStorage.getItem("favorites")) || [];
+
+    const isFavorite =
+    favorites.includes(song._id);
     card.innerHTML = `
       <div class="song-left">
 
@@ -270,9 +393,13 @@ function renderSongs(songs){
       </div>
 
       <div class="song-actions">
-        <button class="play-btn">▶</button>
-        <button class="price-btn">₹${song.price || 0}</button>
-      </div>
+  <button class="play-btn">▶</button>
+  <button class="fav-btn">
+  ${isFavorite ? "❤️" : "♡"}
+</button>
+  <button class="share-btn">↗</button>
+  <button class="price-btn">₹${song.price || 0}</button>
+</div>
     `;
 
     const playBtn =
@@ -280,6 +407,9 @@ function renderSongs(songs){
 
     const priceBtn =
     card.querySelector(".price-btn");
+    const shareBtn = card.querySelector(".share-btn");
+    const favBtn = card.querySelector(".fav-btn");
+  
 
     card.onclick = () =>
     selectSong(song, card);
@@ -294,15 +424,52 @@ function renderSongs(songs){
 
     };
 
-    priceBtn.onclick = (e) => {
+    shareBtn.onclick = (e) => {
+  e.stopPropagation();
 
-      e.stopPropagation();
+  const text = `Check this song: ${song.name} - Praveen Music Store`;
+  const url = "https://praveenmarandi62-lang.github.io/Praveen-Music-Store/";
 
-      selectSong(song, card);
+  window.open(
+    `https://wa.me/?text=${encodeURIComponent(text + " " + url)}`,
+    "_blank"
+  );
+};
 
-      buySong(song);
+favBtn.onclick = (e) => {
 
-    };
+  e.stopPropagation();
+
+  let favorites =
+  JSON.parse(localStorage.getItem("favorites")) || [];
+
+  if(favorites.includes(song._id)){
+
+    favorites =
+    favorites.filter(id => id !== song._id);
+
+    favBtn.textContent = "♡";
+
+  }else{
+
+    favorites.push(song._id);
+
+    favBtn.textContent = "❤️";
+
+  }
+
+  localStorage.setItem(
+    "favorites",
+    JSON.stringify(favorites)
+  );
+
+};
+
+priceBtn.onclick = (e) => {
+  e.stopPropagation();
+  selectSong(song, card);
+  buySong(song);
+};
 
     songList.appendChild(card);
 

@@ -32,14 +32,22 @@ button{
 <body>
 
 <script>
-const password = prompt("Enter Admin Password");
-if(password !== "Ritika@1122"){
-  alert("Wrong Password");
-  window.location.href = "index.html";
+const adminPassword =
+prompt("Enter Admin Password");
+
+if(!adminPassword){
+
+  window.location.href =
+  "index.html";
+
 }
 </script>
 
 <div class="upload-box">
+  <div class="manage-box">
+  <h2>🛠 Manage Songs</h2>
+  <div id="adminSongList"></div>
+</div>
   <h2>🎵 Upload New Song</h2>
 
   <form id="uploadForm">
@@ -65,6 +73,11 @@ if(password !== "Ritika@1122"){
     <input type="file" id="audio" accept="audio/*" required>
 
     <button type="submit">Upload Song</button>
+    <div class="progress-box">
+    <div id="progressBar"></div>
+    </div>
+
+    <p id="progressText">0%</p>
   </form>
 
   <p id="msg"></p>
@@ -73,42 +86,228 @@ if(password !== "Ritika@1122"){
 <script>
 const API = "https://praveen-music-store.onrender.com";
 const form = document.getElementById("uploadForm");
-const msg = document.getElementById("msg");
+const msg = document.getElementById("msg");const progressBar = document.getElementById("progressBar");
+const progressText = document.getElementById("progressText");
+const adminSongList = document.getElementById("adminSongList");
 
-form.addEventListener("submit", async (e) => {
+/* Upload Song */
+form.addEventListener("submit", (e) => {
+
   e.preventDefault();
 
   msg.style.color = "#fff";
   msg.textContent = "Uploading... please wait";
 
-  const formData = new FormData();
-  formData.append("name", document.getElementById("name").value);
-  formData.append("price", document.getElementById("price").value);
-  formData.append("category", document.getElementById("category").value);
-  formData.append("img", document.getElementById("img").files[0]);
-  formData.append("audio", document.getElementById("audio").files[0]);
+  progressBar.style.width = "0%";
+  progressText.textContent = "0%";
 
-  try {
-    const res = await fetch(`${API}/api/upload`, {
-      method: "POST",
-      body: formData
+  const formData = new FormData();
+
+  formData.append(
+    "name",
+    document.getElementById("name").value
+  );
+
+  formData.append(
+    "price",
+    document.getElementById("price").value
+  );
+
+  formData.append(
+    "category",
+    document.getElementById("category").value
+  );
+
+  formData.append(
+    "img",
+    document.getElementById("img").files[0]
+  );
+
+  formData.append(
+    "audio",
+    document.getElementById("audio").files[0]
+  );
+
+  const xhr = new XMLHttpRequest();
+
+  xhr.open(
+    "POST",
+    `${API}/api/upload`
+  );
+
+  xhr.setRequestHeader(
+  "admin-password",
+  adminPassword
+);
+
+  /* Upload Progress */
+
+  xhr.upload.onprogress = (event) => {
+
+    if (event.lengthComputable) {
+
+      const percent = Math.round(
+
+        (event.loaded / event.total) * 100
+
+      );
+
+      progressBar.style.width =
+      percent + "%";
+
+      progressText.textContent =
+      percent + "%";
+
+    }
+
+  };
+
+  /* Upload Complete */
+
+  xhr.onload = () => {
+
+    try {
+
+      const data =
+      JSON.parse(xhr.responseText);
+
+      if (data.success) {
+
+        msg.style.color = "#25D366";
+
+        msg.textContent =
+        "✅ Song uploaded successfully!";
+
+        form.reset();
+
+        progressBar.style.width =
+        "100%";
+
+        progressText.textContent =
+        "Upload Complete";
+
+        loadAdminSongs();
+
+      } else {
+
+        msg.style.color = "red";
+
+        msg.textContent =
+        "❌ Upload failed";
+
+      }
+
+    } catch (err) {
+
+      msg.style.color = "red";
+
+      msg.textContent =
+      "❌ Upload failed";
+
+    }
+
+  };
+
+  /* Upload Error */
+
+  xhr.onerror = () => {
+
+    msg.style.color = "red";
+
+    msg.textContent =
+    "❌ Server error";
+
+  };
+
+  xhr.send(formData);
+
+});
+
+async function loadAdminSongs(){
+  adminSongList.innerHTML = "<p>Loading songs...</p>";
+
+  try{
+    const res = await fetch(`${API}/api/songs`);
+    const songs = await res.json();
+
+    adminSongList.innerHTML = "";
+
+    songs.forEach(song => {
+      const div = document.createElement("div");
+      div.className = "song-item";
+
+      div.innerHTML = `
+        <h3>${song.name}</h3>
+        <p>₹${song.price} | ${song.category || "No Category"}</p>
+
+        <input type="text" value="${song.name}" id="name-${song._id}">
+        <input type="number" value="${song.price}" id="price-${song._id}">
+
+        <select id="category-${song._id}">
+          <option value="Sad" ${song.category === "Sad" ? "selected" : ""}>Sad</option>
+          <option value="Love" ${song.category === "Love" ? "selected" : ""}>Love</option>
+          <option value="DJ Mix" ${song.category === "DJ Mix" ? "selected" : ""}>DJ Mix</option>
+          <option value="LoFi" ${song.category === "LoFi" ? "selected" : ""}>LoFi</option>
+          <option value="Dance" ${song.category === "Dance" ? "selected" : ""}>Dance</option>
+        </select>
+
+        <button onclick="updateSong('${song._id}')">Update</button>
+        <button onclick="deleteSong('${song._id}')">Delete</button>
+      `;
+
+      adminSongList.appendChild(div);
     });
 
-    const data = await res.json();
-
-    if(data.success){
-      msg.style.color = "#25D366";
-      msg.textContent = "✅ Song uploaded successfully!";
-      form.reset();
-    }else{
-      msg.style.color = "red";
-      msg.textContent = "❌ Upload failed";
-    }
   }catch(err){
-    msg.style.color = "red";
-    msg.textContent = "❌ Server error";
+    adminSongList.innerHTML = "<p style='color:red'>Songs load failed</p>";
   }
-});
+}
+
+async function updateSong(id){
+  const name = document.getElementById(`name-${id}`).value;
+  const price = document.getElementById(`price-${id}`).value;
+  const category = document.getElementById(`category-${id}`).value;
+
+  const res = await fetch(`${API}/api/songs/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "admin-password": adminPassword
+    },
+    body: JSON.stringify({ name, price, category })
+  });
+
+  const data = await res.json();
+
+  if(data.success){
+    alert("✅ Song updated");
+    loadAdminSongs();
+  }else{
+    alert("❌ Update failed");
+  }
+}
+
+async function deleteSong(id){
+  if(!confirm("Delete this song?")) return;
+
+  const res = await fetch(`${API}/api/songs/${id}`, {
+    method: "DELETE",
+    headers: {
+      "admin-password": adminPassword
+    }
+  });
+
+  const data = await res.json();
+
+  if(data.success){
+    alert("✅ Song deleted");
+    loadAdminSongs();
+  }else{
+    alert("❌ Delete failed");
+  }
+}
+
+loadAdminSongs();
 </script>
 
 </body>
