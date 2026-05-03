@@ -504,6 +504,12 @@ body{
   margin-bottom:10px;
 }
 
+.categories button.active-category{
+  background:#ff2c2c;
+  color:#fff;
+  box-shadow:0 0 10px rgba(255,44,44,.35);
+}
+
 body{
   -webkit-user-select:none;
   -ms-user-select:none;

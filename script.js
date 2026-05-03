@@ -482,6 +482,16 @@ document.querySelectorAll(".categories button")
 
   btn.onclick = () => {
 
+    /* Remove old active */
+    document
+    .querySelectorAll(".categories button")
+    .forEach(b =>
+      b.classList.remove("active-category")
+    );
+
+    /* Add active */
+    btn.classList.add("active-category");
+
     const category =
     btn.textContent.trim();
 
