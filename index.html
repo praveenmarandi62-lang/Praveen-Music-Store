@@ -5,117 +5,78 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Praveen Music Store</title>
 <link rel="stylesheet" href="style.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<!-- Navbar -->
 <header class="navbar">
-    <div class="logo">🎧 Praveen Music Store</div>
-    <input type="text" placeholder="Search Songs..." class="search-bar">
+  <div class="logo">🎧 Praveen Music Store</div>
+  <input type="text" id="searchInput" placeholder="Search Songs..." class="search-bar">
 </header>
 
-<!-- Hero Banner -->
 <section class="hero">
-    <div class="hero-content">
-        <h1>Unlimited Praveen Music</h1>
-        <p>Stream Preview • Buy Full Song • Download Instantly</p>
-        <button class="hero-btn">Explore Now</button>
-    </div>
+  <div class="hero-content">
+    <h1>Unlimited Praveen Music</h1>
+    <p>Stream Preview • Buy Full Song • Download Instantly</p>
+    <button class="hero-btn">Explore Now</button>
+  </div>
 </section>
 
-<!-- Categories -->
 <section class="category-section">
-    <h2>Top Categories</h2>
-    <div class="categories">
-        <button>Sad</button>
-        <button>Love</button>
-        <button>DJ Mix</button>
-        <button>LoFi</button>
-        <button>Dance</button>
-    </div>
+  <h2>Top Categories</h2>
+  <div class="categories">
+    <button>All</button>
+    <button>Sad</button>
+    <button>Love</button>
+    <button>DJ Mix</button>
+    <button>LoFi</button>
+    <button>Dance</button>
+  </div>
 </section>
 
-<!-- Song List -->
 <section class="song-section">
-    <h2>Trending Songs</h2>
-    <div id="songList" class="song-list">
-        <!-- Songs from backend -->
-    </div>
+  <h2>Trending Songs</h2>
+  <div id="songList" class="song-list"></div>
 </section>
 
-<!-- Terms & Conditions -->
 <section class="terms-section">
-
   <h2>Terms & Conditions</h2>
-
   <div class="terms-box">
-
     <p>✅ Commercial Use Allowed</p>
-
     <p>❌ Resell or Redistribute Not Allowed</p>
-
-    <p>❌ Upload not Allowed in streaming platforms,spotify or apple music etc.</p>
-
+    <p>❌ Upload not Allowed in streaming platforms, Spotify or Apple Music etc.</p>
     <p>✅ Use in YouTube, Instagram, Facebook & Ads Allowed</p>
-
     <p>❌ Claiming Copyright Ownership Not Allowed</p>
-
     <p>✅ Instant Download After Payment</p>
-
     <p>❌ Refund Not Available After Download</p>
-
     <p>✅ Music Created Using AI Tools</p>
+  </div>
+</section>
 
+<footer class="music-player">
+  <div class="player-left">
+    <img id="playerImg" src="" alt="">
+    <div>
+      <h4 id="playerTitle">No Song Selected</h4>
+      <p>Preview Player</p>
+    </div>
   </div>
 
-</section>
-
-<!-- Bottom Music Player -->
-<footer class="music-player">
-    <div class="player-left">
-        <img id="playerImg" src="" alt="">
-        <div>
-            <h4 id="playerTitle">No Song Selected</h4>
-            <p>Preview Player</p>
-        </div>
-    </div>
-
-    <audio 
-id="audioPlayer" 
-controls
-controlsList="nodownload"
-disablePictureInPicture
-></audio>
-
-    <button class="buy-btn">BUY NOW</button>
-
+  <audio id="audioPlayer" controls controlsList="nodownload" disablePictureInPicture></audio>
+  <button class="buy-btn">BUY NOW</button>
 </footer>
 
-<!-- Support Buttons -->
 <div class="support-box">
-
-  <a 
-    href="https://wa.me/919384522971?text=Hello%20Praveen%20Music%20Store"
-    target="_blank"
-    class="support-btn whatsapp-btn"
-  >
-    <span>💬</span>
-    WhatsApp Support
+  <a href="https://wa.me/919384522971?text=Hello%20Praveen%20Music%20Store" target="_blank" class="support-btn whatsapp-btn">
+    <span>💬</span> WhatsApp Support
   </a>
 
-  <a 
-    href="mailto:praveenmarandi62@gmail.com"
-    class="support-btn gmail-btn"
-  >
-    <span>📧</span>
-    Gmail Support
+  <a href="mailto:praveenmarandi62@gmail.com" class="support-btn gmail-btn">
+    <span>📧</span> Gmail Support
   </a>
-
 </div>
 
 <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
-<script src="script.js?v=30"></script>
+<script src="script.js?v=31"></script>
 </body>
 </html>

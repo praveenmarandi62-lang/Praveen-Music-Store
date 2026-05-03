@@ -6,6 +6,8 @@ const playerTitle = document.getElementById("playerTitle");
 const playerImg = document.getElementById("playerImg");
 const buyBtn = document.querySelector(".buy-btn");
 
+let allSongs = [];
+let filteredSongs = [];
 let currentSong = null;
 let selectedCard = null;
 let currentPlayButton = null;
@@ -57,6 +59,26 @@ window.addEventListener("load", async () => {
 
 });
 
+const searchInput =
+document.getElementById("searchInput");
+
+searchInput.addEventListener("input", () => {
+
+  const value =
+  searchInput.value.toLowerCase();
+
+  const searched =
+  allSongs.filter(song =>
+
+    song.name.toLowerCase()
+    .includes(value)
+
+  );
+
+  renderSongs(searched);
+
+});
+
 /* Load Songs */
 async function loadSongs() {
   try {
@@ -67,6 +89,13 @@ async function loadSongs() {
     if (!res.ok) throw new Error("API failed");
 
     const songs = await res.json();
+    allSongs = songs;
+     filteredSongs = songs;
+
+    /* Trending = latest 10 songs */
+    renderSongs(allSongs.slice(0, 10));
+
+    return;
 
     if (!Array.isArray(songs)) throw new Error("Invalid songs data");
 
@@ -239,3 +268,103 @@ buyBtn.onclick = () => {
 };
 
 loadSongs();
+
+function renderSongs(songs){
+
+  songList.innerHTML = "";
+
+  if(songs.length === 0){
+    songList.innerHTML =
+    `<p style="text-align:center;">No songs found</p>`;
+    return;
+  }
+
+  songs.forEach((song, index) => {
+
+    const card = document.createElement("div");
+    card.className = "song-card";
+
+    card.innerHTML = `
+      <div class="song-left">
+
+        <img src="${song.img || ""}">
+
+        <div class="song-info">
+          <h3>${index + 1}. ${song.name || "No Name"}</h3>
+          <p>${song.category || "Trending"}</p>
+        </div>
+
+      </div>
+
+      <div class="song-actions">
+        <button class="play-btn">▶</button>
+        <button class="price-btn">₹${song.price || 0}</button>
+      </div>
+    `;
+
+    const playBtn =
+    card.querySelector(".play-btn");
+
+    const priceBtn =
+    card.querySelector(".price-btn");
+
+    card.onclick = () =>
+    selectSong(song, card);
+
+    playBtn.onclick = (e) => {
+
+      e.stopPropagation();
+
+      selectSong(song, card);
+
+      playSong(song, playBtn);
+
+    };
+
+    priceBtn.onclick = (e) => {
+
+      e.stopPropagation();
+
+      selectSong(song, card);
+
+      buySong(song);
+
+    };
+
+    songList.appendChild(card);
+
+  });
+
+}
+
+document.querySelectorAll(".categories button")
+.forEach(btn => {
+
+  btn.onclick = () => {
+
+    const category =
+    btn.textContent.trim();
+
+    if(category === "All"){
+
+      renderSongs(allSongs.slice(0, 10));
+
+      return;
+
+    }
+
+    const filtered =
+    allSongs.filter(song =>
+
+      (song.category || "")
+      .toLowerCase()
+      ===
+      category.toLowerCase()
+
+    );
+
+    renderSongs(filtered);
+
+  };
+
+});
