@@ -14,13 +14,38 @@ dotenv.config();
 const app = express();
 
 /* =========================
+   ADMIN SECURITY
+========================= */
+
+function checkAdmin(req, res, next){
+
+  const adminPass =
+  req.headers["admin-password"];
+
+  if(adminPass !== process.env.ADMIN_PASSWORD){
+
+    return res.status(401).json({
+
+      success:false,
+      message:"Unauthorized admin"
+
+    });
+
+  }
+
+  next();
+
+}
+
+/* =========================
    MIDDLEWARE
 ========================= */
 
 app.use(cors({
   origin: [
-    "https://praveenmarandi62-lang.github.io"
-  ]
+  "https://praveenmarandi62-lang.github.io",
+  "http://localhost:5500"
+]
 }));
 
 app.use(express.json());
@@ -94,6 +119,7 @@ app.get("/", (req, res) => {
 
 app.post(
   "/api/upload",
+  checkAdmin,
   upload.fields([{ name: "audio" }, { name: "img" }]),
 
   async (req, res) => {
@@ -195,6 +221,48 @@ app.get("/api/songs", async (req, res) => {
 
   }
 
+});
+
+/* Update Song */
+app.put("/api/songs/:id", checkAdmin, async (req, res) => {
+  try {
+    const { name, price, category } = req.body;
+
+    const updatedSong = await Song.findByIdAndUpdate(
+      req.params.id,
+      { name, price, category },
+      { new: true }
+    );
+
+    res.json({
+      success: true,
+      song: updatedSong
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Update Failed"
+    });
+  }
+});
+
+/* Delete Song */
+app.delete("/api/songs/:id", checkAdmin, async (req, res) => {
+  try {
+    await Song.findByIdAndDelete(req.params.id);
+
+    res.json({
+      success: true,
+      message: "Song Deleted"
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Delete Failed"
+    });
+  }
 });
 
 /* =========================
