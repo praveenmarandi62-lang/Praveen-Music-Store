@@ -1,7 +1,3 @@
-/* =========================
-   server.js FINAL
-========================= */
-
 const axios = require("axios");
 const connectCloudinary = require("./cloudinary.js");
 
@@ -11,7 +7,6 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 
 const multer = require("multer");
-
 const cloudinary = require("cloudinary").v2;
 
 dotenv.config();
@@ -53,7 +48,9 @@ mongoose.connect(process.env.MONGO_URI)
 /* =========================
    STORAGE
 ========================= */
+
 const storage = multer.memoryStorage();
+
 const upload = multer({
   storage,
   limits: {
@@ -74,7 +71,8 @@ const Song = mongoose.model(
     name: String,
     img: String,
     audio: String,
-    price: Number
+    price: Number,
+    category: String
 
   })
 
@@ -103,36 +101,52 @@ app.post(
     try {
 
       if (!req.files || !req.files.img || !req.files.audio) {
+
         return res.status(400).json({
           success: false,
           message: "Image or audio missing"
         });
+
       }
 
-      const { name, price } = req.body;
+      const { name, price, category } = req.body;
 
       /* Upload image */
-      const imgUpload = await cloudinary.uploader.upload(
+
+      const imgUpload =
+      await cloudinary.uploader.upload(
+
         `data:${req.files.img[0].mimetype};base64,${req.files.img[0].buffer.toString("base64")}`,
+
         {
           folder: "praveen_music_store/images"
         }
+
       );
 
       /* Upload audio */
-      const audioUpload = await cloudinary.uploader.upload(
+
+      const audioUpload =
+      await cloudinary.uploader.upload(
+
         `data:${req.files.audio[0].mimetype};base64,${req.files.audio[0].buffer.toString("base64")}`,
+
         {
           resource_type: "video",
           folder: "praveen_music_store/audio"
         }
+
       );
 
       const newSong = new Song({
+
         name,
         price,
+        category,
+
         img: imgUpload.secure_url,
         audio: audioUpload.secure_url
+
       });
 
       await newSong.save();
@@ -184,58 +198,105 @@ app.get("/api/songs", async (req, res) => {
 });
 
 /* =========================
-   CREATE PAYMENT - SECURE
+   CREATE PAYMENT
 ========================= */
 
 app.post("/api/create-payment", async (req, res) => {
+
   try {
+
     const { amount, songId } = req.body;
 
-    const orderId = "order_" + Date.now();
+    const orderId =
+    "order_" + Date.now();
 
     const response = await axios.post(
+
       "https://api.cashfree.com/pg/orders",
+
       {
+
         order_amount: Number(amount),
+
         order_currency: "INR",
+
         order_id: orderId,
 
         customer_details: {
-          customer_id: "cust_" + Date.now(),
-          customer_name: "Music Buyer",
-          customer_email: "buyer@example.com",
-          customer_phone: "9384552971"
+
+          customer_id:
+          "cust_" + Date.now(),
+
+          customer_name:
+          "Music Buyer",
+
+          customer_email:
+          "buyer@example.com",
+
+          customer_phone:
+          "9384552971"
+
         },
 
         order_meta: {
+
           return_url:
-            "https://praveenmarandi62-lang.github.io/Praveen-Music-Store/index.html?song=" +
-            songId +
-            "&order_id={order_id}"
+
+          "https://praveenmarandi62-lang.github.io/Praveen-Music-Store/index.html?song=" +
+
+          songId +
+
+          "&order_id={order_id}"
+
         }
+
       },
+
       {
+
         headers: {
-          "x-client-id": process.env.CASHFREE_APP_ID,
-          "x-client-secret": process.env.CASHFREE_SECRET_KEY,
-          "x-api-version": "2023-08-01",
-          "Content-Type": "application/json"
+
+          "x-client-id":
+          process.env.CASHFREE_APP_ID,
+
+          "x-client-secret":
+          process.env.CASHFREE_SECRET_KEY,
+
+          "x-api-version":
+          "2023-08-01",
+
+          "Content-Type":
+          "application/json"
+
         }
+
       }
+
     );
 
-    console.log("CASHFREE RESPONSE:", response.data);
+    console.log(
+      "CASHFREE RESPONSE:",
+      response.data
+    );
 
     res.json(response.data);
 
   } catch (error) {
-    console.log("PAYMENT ERROR:", error.response?.data || error.message);
+
+    console.log(
+      "PAYMENT ERROR:",
+      error.response?.data || error.message
+    );
 
     res.status(500).json({
+
       success: false,
       message: "Payment Failed"
+
     });
+
   }
+
 });
 
 /* =========================
@@ -243,44 +304,138 @@ app.post("/api/create-payment", async (req, res) => {
 ========================= */
 
 app.get("/api/verify-payment/:orderId/:songId", async (req, res) => {
-  try {
-    const { orderId, songId } = req.params;
 
-    const response = await axios.get(
+  try {
+
+    const { orderId, songId } =
+    req.params;
+
+    const response =
+    await axios.get(
+
       `https://api.cashfree.com/pg/orders/${orderId}`,
+
       {
+
         headers: {
-          "x-client-id": process.env.CASHFREE_APP_ID,
-          "x-client-secret": process.env.CASHFREE_SECRET_KEY,
-          "x-api-version": "2023-08-01"
+
+          "x-client-id":
+          process.env.CASHFREE_APP_ID,
+
+          "x-client-secret":
+          process.env.CASHFREE_SECRET_KEY,
+
+          "x-api-version":
+          "2023-08-01"
+
         }
+
       }
+
     );
 
-    console.log("VERIFY PAYMENT:", response.data);
+    console.log(
+      "VERIFY PAYMENT:",
+      response.data
+    );
 
-    if (response.data.order_status === "PAID") {
+    if (
+      response.data.order_status
+      ===
+      "PAID"
+    ) {
+
       return res.json({
+
         success: true,
+
         paid: true,
-        downloadUrl: `https://praveen-music-store.onrender.com/api/download/${songId}`
+
+        downloadUrl:
+
+        `https://praveen-music-store.onrender.com/api/download/${songId}`
+
       });
+
     }
 
     return res.json({
+
       success: true,
+
       paid: false,
-      status: response.data.order_status
+
+      status:
+      response.data.order_status
+
     });
 
   } catch (error) {
-    console.log("VERIFY ERROR:", error.response?.data || error.message);
+
+    console.log(
+      "VERIFY ERROR:",
+      error.response?.data || error.message
+    );
 
     res.status(500).json({
+
       success: false,
       message: "Payment verify failed"
+
     });
+
   }
+
+});
+
+/* =========================
+   DOWNLOAD SONG
+========================= */
+
+app.get("/api/download/:id", async (req, res) => {
+
+  try {
+
+    const song =
+    await Song.findById(req.params.id);
+
+    if (!song) {
+
+      return res
+      .status(404)
+      .send("Song Not Found");
+
+    }
+
+    let fileUrl = song.audio;
+
+    const safeName =
+    (song.name || "song")
+    .replace(/[^a-zA-Z0-9]/g, "_");
+
+    if (fileUrl.includes("/upload/")) {
+
+      fileUrl =
+      fileUrl.replace(
+
+        "/upload/",
+
+        `/upload/fl_attachment:${safeName}/`
+
+      );
+
+    }
+
+    return res.redirect(fileUrl);
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).send("Download Failed");
+
+  }
+
 });
 
 /* =========================
