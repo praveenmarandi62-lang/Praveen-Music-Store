@@ -170,7 +170,7 @@ app.post(
         price,
         category,
 
-        img: imgUpload.secure_url,
+        img: imgUpload.secure_url.replace("/upload/","/upload/f_auto,q_auto/"),
         audio: audioUpload.secure_url
 
       });
