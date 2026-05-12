@@ -6,32 +6,117 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-*{box-sizing:border-box;font-family:Poppins,Arial,sans-serif}
+
+*{
+  box-sizing:border-box;
+  font-family:Poppins,Arial,sans-serif
+}
+
 body{
-  margin:0;background:#0f0f0f;color:#fff;min-height:100vh;
-  display:flex;justify-content:center;align-items:center;padding:20px;
+  margin:0;
+  background:#0f0f0f;
+  color:#fff;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
 }
+
 .upload-box{
-  width:100%;max-width:420px;background:#171717;padding:24px;
-  border-radius:18px;border:1px solid #292929;
+  width:100%;
+  max-width:420px;
+  background:#171717;
+  padding:24px;
+  border-radius:18px;
+  border:1px solid #292929;
 }
-h2{text-align:center;color:#ff2c2c}
-label{font-size:14px;margin-top:12px;display:block;color:#ddd}
-input,select{
-  width:100%;padding:12px;margin-top:6px;border:none;
-  border-radius:12px;background:#242424;color:#fff;
+
+h2{
+  text-align:center;
+  color:#ff2c2c;
 }
+
+label{
+  font-size:14px;
+  margin-top:12px;
+  display:block;
+  color:#ddd;
+}
+
+input,
+select{
+  width:100%;
+  padding:12px;
+  margin-top:6px;
+  border:none;
+  border-radius:12px;
+  background:#242424;
+  color:#fff;
+}
+
 button{
-  width:100%;margin-top:20px;padding:13px;border:none;
-  border-radius:30px;background:#ff2c2c;color:#fff;font-weight:700;
+  width:100%;
+  margin-top:20px;
+  padding:13px;
+  border:none;
+  border-radius:30px;
+  background:#ff2c2c;
+  color:#fff;
+  font-weight:700;
+  cursor:pointer;
 }
-#msg{text-align:center;margin-top:15px}
+
+#msg{
+  text-align:center;
+  margin-top:15px;
+}
+
+.manage-box{
+  margin-bottom:25px;
+  padding-bottom:20px;
+  border-bottom:1px solid #333;
+}
+
+#managerPanel{
+  display:none;
+  margin-top:15px;
+}
+
+#editBox{
+  display:none;
+  margin-top:15px;
+}
+
+.progress-box{
+  width:100%;
+  height:10px;
+  background:#222;
+  border-radius:30px;
+  overflow:hidden;
+  margin-top:15px;
+}
+
+#progressBar{
+  width:0%;
+  height:100%;
+  background:#25D366;
+}
+
+#progressText{
+  text-align:center;
+  font-size:13px;
+  margin-top:8px;
+  color:#aaa;
+}
+
 </style>
 </head>
 
 <body>
 
 <script>
+
 const adminPassword =
 prompt("Enter Admin Password");
 
@@ -41,16 +126,70 @@ if(!adminPassword){
   "index.html";
 
 }
+
 </script>
 
 <div class="upload-box">
+
+  <!-- UPDATE SONG -->
+
   <div class="manage-box">
-  <h2>🛠 Manage Songs</h2>
-  <div id="adminSongList"></div>
-</div>
+
+    <h2>🛠 Update Song</h2>
+
+    <button id="openManager">
+      Select Song To Update
+    </button>
+
+    <div id="managerPanel">
+
+      <select id="songSelect">
+        <option value="">Select Song</option>
+      </select>
+
+      <div id="editBox">
+
+        <label>Song Name</label>
+        <input type="text" id="editName">
+
+        <label>Price</label>
+        <input type="number" id="editPrice">
+
+        <label>Category</label>
+
+        <select id="editCategory">
+
+          <option value="Sad">Sad</option>
+          <option value="Love">Love</option>
+          <option value="BGM">BGM</option>
+          <option value="LoFi">LoFi</option>
+          <option value="Vlog">Vlog</option>
+
+        </select>
+
+        <button id="saveBtn">
+          Update Song
+        </button>
+
+        <button
+          id="deleteBtn"
+          style="background:#444;margin-top:10px;"
+        >
+          Delete Song
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- UPLOAD NEW SONG -->
+
   <h2>🎵 Upload New Song</h2>
 
   <form id="uploadForm">
+
     <label>Song Name</label>
     <input type="text" id="name" required>
 
@@ -58,48 +197,112 @@ if(!adminPassword){
     <input type="number" id="price" required>
 
     <label>Category</label>
+
     <select id="category" required>
+
       <option value="Sad">Sad</option>
       <option value="Love">Love</option>
       <option value="BGM">BGM</option>
       <option value="LoFi">LoFi</option>
       <option value="Vlog">Vlog</option>
+
     </select>
 
     <label>Cover Image</label>
-    <input type="file" id="img" accept="image/*" required>
+    <input
+      type="file"
+      id="img"
+      accept="image/*"
+      required
+    >
 
     <label>Audio File</label>
-    <input type="file" id="audio" accept="audio/*" required>
+    <input
+      type="file"
+      id="audio"
+      accept="audio/*"
+      required
+    >
 
-    <button type="submit">Upload Song</button>
+    <button type="submit">
+      Upload Song
+    </button>
+
     <div class="progress-box">
-    <div id="progressBar"></div>
+      <div id="progressBar"></div>
     </div>
 
     <p id="progressText">0%</p>
+
   </form>
 
   <p id="msg"></p>
+
 </div>
 
 <script>
-const API = "https://praveen-music-store.onrender.com";
-const form = document.getElementById("uploadForm");
-const msg = document.getElementById("msg");const progressBar = document.getElementById("progressBar");
-const progressText = document.getElementById("progressText");
-const adminSongList = document.getElementById("adminSongList");
 
-/* Upload Song */
-form.addEventListener("submit", (e) => {
+const API =
+"https://praveen-music-store.onrender.com";
+
+const form =
+document.getElementById("uploadForm");
+
+const msg =
+document.getElementById("msg");
+
+const progressBar =
+document.getElementById("progressBar");
+
+const progressText =
+document.getElementById("progressText");
+
+const openManager =
+document.getElementById("openManager");
+
+const managerPanel =
+document.getElementById("managerPanel");
+
+const songSelect =
+document.getElementById("songSelect");
+
+const editBox =
+document.getElementById("editBox");
+
+let allSongs = [];
+
+let currentSongId = null;
+
+/* TOGGLE UPDATE PANEL */
+
+openManager.addEventListener("click",()=>{
+
+  if(managerPanel.style.display==="block"){
+
+    managerPanel.style.display="none";
+
+  }else{
+
+    managerPanel.style.display="block";
+
+  }
+
+});
+
+/* UPLOAD SONG */
+
+form.addEventListener("submit",(e)=>{
 
   e.preventDefault();
 
-  msg.style.color = "#fff";
-  msg.textContent = "Uploading... please wait";
+  msg.style.color="#fff";
 
-  progressBar.style.width = "0%";
-  progressText.textContent = "0%";
+  msg.textContent=
+  "Uploading... please wait";
+
+  progressBar.style.width="0%";
+
+  progressText.textContent="0%";
 
   const formData = new FormData();
 
@@ -136,20 +339,17 @@ form.addEventListener("submit", (e) => {
   );
 
   xhr.setRequestHeader(
-  "admin-password",
-  adminPassword
-);
+    "admin-password",
+    adminPassword
+  );
 
-  /* Upload Progress */
+  xhr.upload.onprogress = (event)=>{
 
-  xhr.upload.onprogress = (event) => {
+    if(event.lengthComputable){
 
-    if (event.lengthComputable) {
-
-      const percent = Math.round(
-
-        (event.loaded / event.total) * 100
-
+      const percent =
+      Math.round(
+        (event.loaded/event.total)*100
       );
 
       progressBar.style.width =
@@ -162,18 +362,16 @@ form.addEventListener("submit", (e) => {
 
   };
 
-  /* Upload Complete */
+  xhr.onload = ()=>{
 
-  xhr.onload = () => {
-
-    try {
+    try{
 
       const data =
       JSON.parse(xhr.responseText);
 
-      if (data.success) {
+      if(data.success){
 
-        msg.style.color = "#25D366";
+        msg.style.color="#25D366";
 
         msg.textContent =
         "✅ Song uploaded successfully!";
@@ -188,33 +386,31 @@ form.addEventListener("submit", (e) => {
 
         loadAdminSongs();
 
-      } else {
+      }else{
 
-        msg.style.color = "red";
+        msg.style.color="red";
 
-        msg.textContent =
+        msg.textContent=
         "❌ Upload failed";
 
       }
 
-    } catch (err) {
+    }catch(err){
 
-      msg.style.color = "red";
+      msg.style.color="red";
 
-      msg.textContent =
+      msg.textContent=
       "❌ Upload failed";
 
     }
 
   };
 
-  /* Upload Error */
+  xhr.onerror = ()=>{
 
-  xhr.onerror = () => {
+    msg.style.color="red";
 
-    msg.style.color = "red";
-
-    msg.textContent =
+    msg.textContent=
     "❌ Server error";
 
   };
@@ -223,91 +419,175 @@ form.addEventListener("submit", (e) => {
 
 });
 
+/* LOAD SONGS */
+
 async function loadAdminSongs(){
-  adminSongList.innerHTML = "<p>Loading songs...</p>";
 
   try{
-    const res = await fetch(`${API}/api/songs`);
-    const songs = await res.json();
 
-    adminSongList.innerHTML = "";
+    const res =
+    await fetch(`${API}/api/songs`);
 
-    songs.forEach(song => {
-      const div = document.createElement("div");
-      div.className = "song-item";
+    const songs =
+    await res.json();
 
-      div.innerHTML = `
-        <h3>${song.name}</h3>
-        <p>₹${song.price} | ${song.category || "No Category"}</p>
+    allSongs = songs;
 
-        <input type="text" value="${song.name}" id="name-${song._id}">
-        <input type="number" value="${song.price}" id="price-${song._id}">
+    songSelect.innerHTML =
+    `<option value="">Select Song</option>`;
 
-        <select id="category-${song._id}">
-          <option value="Sad" ${song.category === "Sad" ? "selected" : ""}>Sad</option>
-          <option value="Love" ${song.category === "Love" ? "selected" : ""}>Love</option>
-          <option value="DJ Mix" ${song.category === "DJ Mix" ? "selected" : ""}>DJ Mix</option>
-          <option value="LoFi" ${song.category === "LoFi" ? "selected" : ""}>LoFi</option>
-          <option value="Dance" ${song.category === "Dance" ? "selected" : ""}>Dance</option>
-        </select>
+    songs.forEach(song=>{
 
-        <button onclick="updateSong('${song._id}')">Update</button>
-        <button onclick="deleteSong('${song._id}')">Delete</button>
-      `;
+      const option =
+      document.createElement("option");
 
-      adminSongList.appendChild(div);
+      option.value = song._id;
+
+      option.textContent =
+      song.name;
+
+      songSelect.appendChild(option);
+
     });
 
   }catch(err){
-    adminSongList.innerHTML = "<p style='color:red'>Songs load failed</p>";
+
+    alert("Songs load failed");
+
   }
+
 }
 
-async function updateSong(id){
-  const name = document.getElementById(`name-${id}`).value;
-  const price = document.getElementById(`price-${id}`).value;
-  const category = document.getElementById(`category-${id}`).value;
+/* SELECT SONG */
 
-  const res = await fetch(`${API}/api/songs/${id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      "admin-password": adminPassword
-    },
-    body: JSON.stringify({ name, price, category })
-  });
+songSelect.addEventListener("change",()=>{
 
-  const data = await res.json();
+  const id =
+  songSelect.value;
 
-  if(data.success){
-    alert("✅ Song updated");
-    loadAdminSongs();
-  }else{
-    alert("❌ Update failed");
+  const song =
+  allSongs.find(s=>s._id===id);
+
+  if(!song){
+
+    editBox.style.display="none";
+
+    return;
+
   }
-}
 
-async function deleteSong(id){
-  if(!confirm("Delete this song?")) return;
+  currentSongId = id;
 
-  const res = await fetch(`${API}/api/songs/${id}`, {
-    method: "DELETE",
-    headers: {
-      "admin-password": adminPassword
+  editBox.style.display="block";
+
+  document.getElementById("editName").value =
+  song.name;
+
+  document.getElementById("editPrice").value =
+  song.price;
+
+  document.getElementById("editCategory").value =
+  song.category || "Sad";
+
+});
+
+/* UPDATE SONG */
+
+document.getElementById("saveBtn")
+.addEventListener("click",async()=>{
+
+  const name =
+  document.getElementById("editName").value;
+
+  const price =
+  document.getElementById("editPrice").value;
+
+  const category =
+  document.getElementById("editCategory").value;
+
+  const res = await fetch(
+
+    `${API}/api/songs/${currentSongId}`,
+
+    {
+
+      method:"PUT",
+
+      headers:{
+        "Content-Type":"application/json",
+        "admin-password":adminPassword
+      },
+
+      body:JSON.stringify({
+        name,
+        price,
+        category
+      })
+
     }
-  });
+
+  );
 
   const data = await res.json();
 
   if(data.success){
-    alert("✅ Song deleted");
+
+    alert("✅ Song Updated");
+
     loadAdminSongs();
+
   }else{
-    alert("❌ Delete failed");
+
+    alert("❌ Update Failed");
+
   }
-}
+
+});
+
+/* DELETE SONG */
+
+document.getElementById("deleteBtn")
+.addEventListener("click",async()=>{
+
+  if(!confirm("Delete this song?"))
+  return;
+
+  const res = await fetch(
+
+    `${API}/api/songs/${currentSongId}`,
+
+    {
+
+      method:"DELETE",
+
+      headers:{
+        "admin-password":adminPassword
+      }
+
+    }
+
+  );
+
+  const data = await res.json();
+
+  if(data.success){
+
+    alert("✅ Song Deleted");
+
+    editBox.style.display="none";
+
+    loadAdminSongs();
+
+  }else{
+
+    alert("❌ Delete Failed");
+
+  }
+
+});
 
 loadAdminSongs();
+
 </script>
 
 </body>
